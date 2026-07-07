@@ -3,6 +3,7 @@ package appsetup
 import (
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -72,6 +73,27 @@ func Setup() *fiber.App {
 	// ============================================================
 
 	api := app.Group("/api")
+
+	// Debug endpoint to list file structure at runtime
+	api.Get("/debug-files", func(c *fiber.Ctx) error {
+		cwd, _ := os.Getwd()
+		var files []string
+		_ = filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return nil
+			}
+			if info.IsDir() {
+				files = append(files, path+"/")
+			} else {
+				files = append(files, path)
+			}
+			return nil
+		})
+		return c.JSON(fiber.Map{
+			"cwd":   cwd,
+			"files": files,
+		})
+	})
 
 	// 1. Public / Customer Endpoints (Diproteksi Rate Limiter)
 	api.Get("/check-user", middleware.RateLimit, handlers.CheckUser)

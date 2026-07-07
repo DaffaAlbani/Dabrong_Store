@@ -3,13 +3,7 @@
   "builds": [
     {
       "src": "api/index.go",
-      "use": "@vercel/go",
-      "config": {
-        "includeFiles": [
-          "public/**",
-          "admin-views/**"
-        ]
-      }
+      "use": "@vercel/go"
     }
   ],
   "routes": [

@@ -1,11 +1,15 @@
 package appsetup
 
 import (
+	"embed"
+	"io/fs"
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
 	"ml-topup-v2/database"
@@ -13,9 +17,27 @@ import (
 	"ml-topup-v2/middleware"
 )
 
+//go:embed public
+var embedPublic embed.FS
+
+//go:embed admin-views
+var embedAdmin embed.FS
+
 func Setup() *fiber.App {
 	// Load environment variables dari .env
 	_ = godotenv.Load() // Ignore error on production/Vercel where .env file is missing
+
+	// Get subdirectory FS for public
+	publicFS, err := fs.Sub(embedPublic, "public")
+	if err != nil {
+		log.Fatalf("[FATAL] Gagal inisialisasi public embed FS: %v\n", err)
+	}
+
+	// Get subdirectory FS for admin-views
+	adminFS, err := fs.Sub(embedAdmin, "admin-views")
+	if err != nil {
+		log.Fatalf("[FATAL] Gagal inisialisasi admin embed FS: %v\n", err)
+	}
 
 	// Detect if running on Vercel or AWS Lambda
 	dbPath := "./orders.db"
@@ -25,7 +47,7 @@ func Setup() *fiber.App {
 	}
 
 	// Inisialisasi Database SQLite
-	err := database.InitDB(dbPath)
+	err = database.InitDB(dbPath)
 	if err != nil {
 		log.Fatalf("[FATAL] Gagal inisialisasi database: %v\n", err)
 	}
@@ -44,14 +66,6 @@ func Setup() *fiber.App {
 	//  STATIC ASSETS SERVING (Pemisahan Customer & Admin)
 	// ============================================================
 
-	// 1. Customer Frontend (Public)
-	app.Static("/", "./public")
-	
-	// Route status tanpa ekstensi .html
-	app.Get("/status", func(c *fiber.Ctx) error {
-		return c.SendFile("./public/status.html")
-	})
-
 	// 2. Admin Frontend (Hidden & Secret Path)
 	adminSecretPath := os.Getenv("ADMIN_SECRET_PATH")
 	if adminSecretPath == "" {
@@ -61,12 +75,33 @@ func Setup() *fiber.App {
 	log.Printf("[SERVER] Halaman admin tersembunyi dapat diakses di: /%s\n", adminSecretPath)
 	
 	// Serve static files admin pada path rahasia
-	app.Static("/"+adminSecretPath, "./admin-views")
+	app.Use("/"+adminSecretPath, filesystem.New(filesystem.Config{
+		Root:   http.FS(adminFS),
+		Browse: false,
+		Index:  "index.html",
+	}))
 
 	// Redirect path umum /admin ke 404 Not Found
 	app.Get("/admin", func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).SendString("404 Page Not Found")
 	})
+
+	// Route status tanpa ekstensi .html
+	app.Get("/status", func(c *fiber.Ctx) error {
+		fileContent, err := fs.ReadFile(publicFS, "status.html")
+		if err != nil {
+			return c.Status(fiber.StatusNotFound).SendString("404 Page Not Found")
+		}
+		c.Set(fiber.HeaderContentType, fiber.MIMETextHTMLCharsetUTF8)
+		return c.Send(fileContent)
+	})
+
+	// 1. Customer Frontend (Public)
+	app.Use("/", filesystem.New(filesystem.Config{
+		Root:   http.FS(publicFS),
+		Browse: false,
+		Index:  "index.html",
+	}))
 
 	// ============================================================
 	//  API ROUTES

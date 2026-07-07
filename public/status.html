@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cek Status Order — Dabrong Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=Orbitron:wght@700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/style.css"/>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+
+  <header class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <i data-lucide="gem" class="logo-gem-icon"></i>
+        <div>
+          <span class="logo-main">Dabrong<span class="gold"> Store</span></span>
+          <span class="logo-sub">Top-Up Center</span>
+        </div>
+      </a>
+      <nav class="nav-links" id="nav-links">
+        <a href="/"       class="nav-a">Home</a>
+        <a href="/#marketplace" class="nav-a">Katalog</a>
+        <a href="/status" class="nav-a active">Cek Order</a>
+      </nav>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <section class="section status-section">
+    <div class="container container-sm">
+      <div class="sec-hd">
+        <span class="sec-tag"><i data-lucide="search" class="icon-inline"></i> Lacak Pesanan</span>
+        <h2 class="sec-title">Cek Status <span class="gold">Order</span></h2>
+        <p class="sec-desc">Masukkan No. Order yang kamu terima saat melakukan pemesanan</p>
+      </div>
+
+      <div class="status-box">
+        <div class="fg">
+          <label>No. Order</label>
+          <div class="input-row-btn">
+            <input type="text" id="inp-order-no" placeholder="Contoh: DML1751234567" style="text-transform:uppercase" maxlength="20"/>
+            <button class="btn btn-gold" id="btn-cek-status">Cek</button>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="status-loading hidden" id="status-loading">
+          <div class="spinner"></div>
+          <span>Mencari order...</span>
+        </div>
+
+        <!-- Result -->
+        <div class="order-result hidden" id="order-result">
+          <div class="or-header">
+            <div class="or-no" id="or-no">—</div>
+            <div class="status-badge" id="or-status-badge">—</div>
+          </div>
+          <div class="or-grid">
+            <div class="or-row"><span><i data-lucide="user" class="icon-inline"></i> Player</span><strong id="or-player">—</strong></div>
+            <div class="or-row"><span><i data-lucide="gem" class="icon-inline"></i> Paket</span><strong id="or-package">—</strong></div>
+            <div class="or-row"><span><i data-lucide="credit-card" class="icon-inline"></i> Total</span><strong id="or-total">—</strong></div>
+            <div class="or-row"><span><i data-lucide="info" class="icon-inline"></i> Rekening</span><strong id="or-bank">—</strong></div>
+            <div class="or-row"><span><i data-lucide="calendar" class="icon-inline"></i> Dibuat</span><strong id="or-created">—</strong></div>
+            <div class="or-row" id="or-confirmed-row" style="display:none"><span><i data-lucide="check-circle" class="icon-inline"></i> Dikonfirmasi</span><strong id="or-confirmed">—</strong></div>
+            <div class="or-row" id="or-completed-row" style="display:none"><span><i data-lucide="zap" class="icon-inline"></i> Selesai</span><strong id="or-completed">—</strong></div>
+          </div>
+
+          <!-- Status Timeline -->
+          <div class="status-timeline" id="status-timeline">
+            <div class="stl-item" id="stl-pending">
+              <div class="stl-dot"></div>
+              <div class="stl-label"><strong>Order Dibuat</strong><span>Menunggu pembayaran</span></div>
+            </div>
+            <div class="stl-line"></div>
+            <div class="stl-item" id="stl-proses">
+              <div class="stl-dot"></div>
+              <div class="stl-label"><strong>Pembayaran Dikonfirmasi</strong><span>Pesanan sedang diproses</span></div>
+            </div>
+            <div class="stl-line"></div>
+            <div class="stl-item" id="stl-sukses">
+              <div class="stl-dot"></div>
+              <div class="stl-label"><strong>Item Terkirim</strong><span>Top-up berhasil!</span></div>
+            </div>
+          </div>
+
+          <!-- QRIS Section if status PENDING and payment method is QRIS -->
+          <div id="status-qris-container" class="hidden" style="margin-top:20px;margin-bottom:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(245,158,11,0.18);border-radius:12px;padding:20px 10px;text-align:center;">
+            <div style="font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">📲 Pindai QRIS di bawah ini</div>
+            <img id="status-qris-img" src="/images/qris.jpg" alt="QRIS Dabrong Store" style="width:220px;border-radius:12px;border:4px solid var(--white);box-shadow: 0 4px 20px rgba(0,0,0,0.5);margin:0 auto 10px;display:block;" />
+            <span style="font-size:0.8rem;color:var(--muted)">NMID: ID1026545112355 | Dabrong Store</span>
+          </div>
+
+          <!-- WA Button (jika masih PENDING) -->
+          <a class="btn btn-wa w100 hidden" id="or-wa-btn" href="#" target="_blank" style="margin-top:16px">
+            <i data-lucide="message-square" class="btn-icon"></i> Konfirmasi Bayar via WhatsApp
+          </a>
+
+          <button class="btn btn-ghost w100" onclick="location.href='/'" style="margin-top:10px">
+            <i data-lucide="gem" class="btn-icon"></i> Top-Up Lagi
+          </button>
+        </div>
+
+        <!-- Not Found -->
+        <div class="not-found hidden" id="not-found">
+          <div class="nf-icon"><i data-lucide="alert-circle" style="width:3rem;height:3rem;color:var(--muted)"></i></div>
+          <p>Order <strong id="nf-no">—</strong> tidak ditemukan.</p>
+          <p style="color:var(--text-muted);font-size:.85rem">Pastikan No. Order benar. Contoh: DML1751234567</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="toast hidden" id="toast"><span id="toast-icon"><i data-lucide="check-circle"></i></span><span id="toast-msg">Berhasil!</span></div>
+
+  <script src="/script.js"></script>
+  <script>
+    // Status page specific logic
+    document.addEventListener('DOMContentLoaded', () => {
+      initNavbar(); initParticles(); initBtt();
+
+      // Pre-fill from URL query
+      const params = new URLSearchParams(location.search);
+      const no = params.get('order');
+      if (no) {
+        document.getElementById('inp-order-no').value = no.toUpperCase();
+        checkOrderStatus(no);
+      }
+
+      document.getElementById('btn-cek-status').addEventListener('click', () => {
+        const no = document.getElementById('inp-order-no').value.trim().toUpperCase();
+        if (!no) return showToast('Masukkan No. Order', '⚠️');
+        checkOrderStatus(no);
+      });
+
+      document.getElementById('inp-order-no').addEventListener('keypress', e => {
+        if (e.key === 'Enter') document.getElementById('btn-cek-status').click();
+      });
+    });
+
+    async function checkOrderStatus(orderNo) {
+      const loading  = document.getElementById('status-loading');
+      const result   = document.getElementById('order-result');
+      const notFound = document.getElementById('not-found');
+
+      loading.classList.remove('hidden');
+      result.classList.add('hidden');
+      notFound.classList.add('hidden');
+
+      try {
+        const res  = await fetch(`/api/order/${orderNo}`);
+        const data = await res.json();
+        loading.classList.add('hidden');
+
+        if (!data.success) {
+          document.getElementById('nf-no').textContent = orderNo;
+          notFound.classList.remove('hidden');
+          return;
+        }
+
+        const o = data.order;
+        document.getElementById('or-no').textContent      = o.order_no;
+        document.getElementById('or-player').textContent  = `${o.player_name || '—'} (ID: ${o.player_id})`;
+        document.getElementById('or-package').textContent = `${o.product_name} (${o.diamond} 💎)`;
+        document.getElementById('or-total').textContent   = `Rp ${o.total_bayar.toLocaleString('id-ID')}`;
+        
+        const qrisContainer = document.getElementById('status-qris-container');
+        const bankRow = document.getElementById('or-bank').closest('.or-row');
+        const bankLabel = bankRow.querySelector('span');
+
+        if (o.payment_method === 'qris') {
+          bankLabel.innerHTML = `<i data-lucide="info" class="icon-inline"></i> Pembayaran`;
+          document.getElementById('or-bank').textContent = 'QRIS Dabrong Store';
+          
+          if (o.status === 'PENDING') {
+            qrisContainer.classList.remove('hidden');
+            try {
+              const dynamicQRIS = generateDynamicQRIS(o.total_bayar);
+              document.getElementById('status-qris-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(dynamicQRIS)}`;
+            } catch (e) {
+              document.getElementById('status-qris-img').src = `/images/qris.jpg`;
+            }
+          } else {
+            qrisContainer.classList.add('hidden');
+          }
+        } else {
+          bankLabel.innerHTML = `<i data-lucide="info" class="icon-inline"></i> Rekening`;
+          document.getElementById('or-bank').textContent = `${o.bank_name} ${o.bank_account} a/n ${o.bank_holder}`;
+          qrisContainer.classList.add('hidden');
+        }
+
+        document.getElementById('or-created').textContent = o.created_at;
+
+        if (o.confirmed_at) {
+          document.getElementById('or-confirmed-row').style.display = 'flex';
+          document.getElementById('or-confirmed').textContent = o.confirmed_at;
+        }
+        if (o.completed_at) {
+          document.getElementById('or-completed-row').style.display = 'flex';
+          document.getElementById('or-completed').textContent = o.completed_at;
+        }
+
+        // Status badge
+        const badge = document.getElementById('or-status-badge');
+        badge.textContent = o.status;
+        badge.className   = 'status-badge status-' + o.status.toLowerCase();
+
+        // Timeline
+        const steps = { PENDING: 0, PROSES: 1, KONFIRMASI: 1, SUKSES: 2, GAGAL: -1 };
+        const step  = steps[o.status] ?? 0;
+        document.querySelectorAll('.stl-item').forEach((el, i) => {
+          if (o.status === 'GAGAL') {
+            el.classList.toggle('stl-failed', i === 0);
+          } else {
+            el.classList.toggle('stl-done', i <= step);
+            el.classList.toggle('stl-active', i === step);
+          }
+        });
+
+        // WhatsApp button if PENDING
+        const waBtn = document.getElementById('or-wa-btn');
+        if (o.status === 'PENDING') {
+          const waNum = '6281234567890'; // Admin WA
+          const msg   = encodeURIComponent(`Halo Admin, saya ingin konfirmasi pembayaran untuk order ${o.order_no}`);
+          waBtn.href  = `https://wa.me/${waNum}?text=${msg}`;
+          waBtn.classList.remove('hidden');
+        }
+
+        result.classList.remove('hidden');
+      } catch (err) {
+        loading.classList.add('hidden');
+        showToast('Gagal terhubung ke server', '❌');
+      }
+    }
+
+    /* ================================
+       DYNAMIC QRIS GENERATOR
+       ================================ */
+    function generateDynamicQRIS(amount) {
+      const staticQRIS = "00020101021126570011ID.DANA.WWW011893600915303309664402090330966440303UMI51440014ID.CO.QRIS.WWW0215ID10265451123550303UMI5204654053033605802ID5913Dabrong Store6015Kota Probolingg61056723763046FF0";
+      
+      // Remove CRC16 at the end
+      let payload = staticQRIS.slice(0, -4);
+      
+      // Replace 010211 (static) with 010212 (dynamic)
+      payload = payload.replace("010211", "010212");
+      
+      // Format amount tag: tag 54 + length of amount + amount
+      const amountStr = amount.toString();
+      const amountTag = "54" + amountStr.length.toString().padStart(2, "0") + amountStr;
+      
+      // Insert amount tag right after currency tag 5303360
+      const currencyTag = "5303360";
+      const pos = payload.indexOf(currencyTag);
+      if (pos !== -1) {
+        payload = payload.slice(0, pos + currencyTag.length) + amountTag + payload.slice(pos + currencyTag.length);
+      }
+      
+      // Calculate CRC16 CCITT FALSE
+      let crc = 0xFFFF;
+      const polynomial = 0x1021;
+      
+      for (let i = 0; i < payload.length; i++) {
+        const byte = payload.charCodeAt(i);
+        crc ^= (byte << 8);
+        for (let j = 0; j < 8; j++) {
+          if ((crc & 0x8000) !== 0) {
+            crc = ((crc << 1) ^ polynomial) & 0xFFFF;
+          } else {
+            crc = (crc << 1) & 0xFFFF;
+          }
+        }
+      }
+      
+      const crcHex = crc.toString(16).toUpperCase().padStart(4, "0");
+      return payload + crcHex;
+    }
+  </script>
+</body>
+</html>

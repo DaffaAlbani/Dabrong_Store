@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel — Dabrong Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/style.css"/>
+  <link rel="stylesheet" href="admin.css"/>
+</head>
+<body class="admin-body">
+
+  <!-- LOGIN OVERLAY -->
+  <div class="login-overlay" id="login-overlay">
+    <div class="login-box">
+      <div class="login-logo"><span>💎</span> Dabrong Store Admin</div>
+      <h2>Login Panel</h2>
+      <div class="fg">
+        <label>Username</label>
+        <input type="text" id="adm-user" placeholder="admin" autocomplete="username"/>
+      </div>
+      <div class="fg">
+        <label>Password</label>
+        <input type="password" id="adm-pass" placeholder="Password" autocomplete="current-password"/>
+      </div>
+      <div class="login-err hidden" id="login-err"></div>
+      <button class="btn btn-gold w100" id="btn-login">Login →</button>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div class="admin-wrapper hidden" id="admin-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span>💎</span>
+        <div>
+          <span>Dabrong<span class="gold"> Store</span></span>
+          <small>Admin Panel</small>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="snav-btn active" data-page="dashboard" id="snav-dash">📊 Dashboard</button>
+        <button class="snav-btn" data-page="orders" id="snav-orders">📋 Semua Order</button>
+        <button class="snav-btn" data-page="pending" id="snav-pending">⏳ Order Pending <span class="badge-count" id="pending-count">0</span></button>
+        <button class="snav-btn" data-page="products" id="snav-products">💎 Produk</button>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-ghost" id="btn-logout" style="width:100%;justify-content:center">Logout</button>
+        <a href="/" class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:8px;display:flex">← Customer</a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-main">
+
+      <!-- DASHBOARD -->
+      <div class="admin-page active" id="page-dashboard">
+        <div class="adm-hd">
+          <h2>📊 Dashboard</h2>
+          <button class="btn btn-outline" id="btn-refresh-dash">🔄 Refresh</button>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="sc-icon">📋</div><div class="sc-info"><span class="sc-val" id="sc-total">—</span><span class="sc-lbl">Total Order</span></div></div>
+          <div class="stat-card sc-pending"><div class="sc-icon">⏳</div><div class="sc-info"><span class="sc-val" id="sc-pending">—</span><span class="sc-lbl">Pending</span></div></div>
+          <div class="stat-card sc-proses"><div class="sc-icon">🔄</div><div class="sc-info"><span class="sc-val" id="sc-proses">—</span><span class="sc-lbl">Diproses</span></div></div>
+          <div class="stat-card sc-sukses"><div class="sc-icon">✅</div><div class="sc-info"><span class="sc-val" id="sc-sukses">—</span><span class="sc-lbl">Sukses</span></div></div>
+          <div class="stat-card sc-gagal"><div class="sc-icon">❌</div><div class="sc-info"><span class="sc-val" id="sc-gagal">—</span><span class="sc-lbl">Gagal</span></div></div>
+          <div class="stat-card sc-revenue"><div class="sc-icon">💰</div><div class="sc-info"><span class="sc-val" id="sc-revenue">—</span><span class="sc-lbl">Revenue</span></div></div>
+        </div>
+        <div class="balance-card" id="balance-card">
+          <h4>💳 Saldo Apigames.id</h4>
+          <div class="bc-amount" id="bc-amount">Memuat...</div>
+        </div>
+        <div class="recent-orders">
+          <h3>Order Terbaru</h3>
+          <div class="orders-table-wrap">
+            <table class="orders-table" id="recent-table">
+              <thead><tr><th>No. Order</th><th>Player</th><th>Paket</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody id="recent-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALL ORDERS -->
+      <div class="admin-page" id="page-orders">
+        <div class="adm-hd">
+          <h2>📋 Semua Order</h2>
+          <div class="adm-hd-actions">
+            <select id="filter-status" class="filter-sel">
+              <option value="">Semua Status</option>
+              <option value="PENDING">Pending</option>
+              <option value="PROSES">Diproses</option>
+              <option value="SUKSES">Sukses</option>
+              <option value="GAGAL">Gagal</option>
+            </select>
+            <button class="btn btn-outline" id="btn-refresh-orders">🔄 Refresh</button>
+          </div>
+        </div>
+        <div class="orders-table-wrap">
+          <table class="orders-table" id="all-orders-table">
+            <thead><tr><th>No. Order</th><th>Player</th><th>Paket</th><th>Total</th><th>WA</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody id="all-orders-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PENDING ORDERS -->
+      <div class="admin-page" id="page-pending">
+        <div class="adm-hd">
+          <h2>⏳ Order Pending</h2>
+          <button class="btn btn-outline" id="btn-refresh-pending">🔄 Refresh</button>
+        </div>
+        <p style="color:var(--text-muted);margin-bottom:20px">Konfirmasi pembayaran untuk memproses diamond ke akun player via Apigames.id</p>
+        <div class="pending-list" id="pending-list"></div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div class="admin-page" id="page-products">
+        <div class="adm-hd">
+          <h2>💎 Produk ML (Pricelist)</h2>
+          <div class="adm-hd-actions">
+            <button class="btn btn-gold" id="btn-add-product">➕ Tambah Produk</button>
+            <button class="btn btn-outline" id="btn-refresh-products" style="display:none">🔄 Refresh</button>
+          </div>
+        </div>
+        <div class="products-grid" id="admin-products-grid"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ORDER DETAIL MODAL -->
+  <div class="modal-overlay hidden" id="modal-overlay">
+    <div class="modal">
+      <button class="modal-close" id="modal-close">✕</button>
+      <h3 id="modal-title">Detail Order</h3>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-actions" id="modal-actions"></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast hidden" id="toast"><span id="toast-icon">✅</span><span id="toast-msg">Berhasil!</span></div>
+
+  <script src="/script.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

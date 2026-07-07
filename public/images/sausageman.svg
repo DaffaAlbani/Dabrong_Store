@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100">
+  <defs>
+    <linearGradient id="sausage-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffb300"/>
+      <stop offset="100%" stop-color="#ff3d00"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+  <g filter="url(#glow)">
+    <!-- Sausage Face Icon -->
+    <g transform="translate(10, 0)">
+      <rect x="35" y="20" width="30" height="60" rx="15" fill="url(#sausage-grad)"/>
+      <circle cx="43" cy="40" r="3" fill="#fff"/>
+      <circle cx="57" cy="40" r="3" fill="#fff"/>
+      <path d="M 44,52 Q 50,58 56,52" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <!-- Tiny Cape/Bowtie -->
+      <path d="M 30,68 L 50,60 L 70,68 L 50,75 Z" fill="#fff" opacity="0.8"/>
+    </g>
+
+    <!-- Text -->
+    <text x="185" y="50" text-anchor="middle" fill="url(#sausage-grad)" font-family="'Orbitron', sans-serif" font-weight="900" font-size="26" letter-spacing="1">SAUSAGE MAN</text>
+    <text x="185" y="76" text-anchor="middle" fill="#fff" font-family="'Rajdhani', sans-serif" font-weight="700" font-size="15" letter-spacing="4" opacity="0.9">BATTLE ROYALE</text>
+  </g>
+</svg>

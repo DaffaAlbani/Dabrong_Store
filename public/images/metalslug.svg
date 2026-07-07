@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100">
+  <defs>
+    <linearGradient id="metal-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffeb3b"/>
+      <stop offset="50%" stop-color="#ff9800"/>
+      <stop offset="100%" stop-color="#f44336"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.8"/>
+    </filter>
+  </defs>
+  <g filter="url(#glow)">
+    <!-- Gear / Tank Icon -->
+    <g transform="translate(10, 0)">
+      <circle cx="50" cy="50" r="22" fill="none" stroke="url(#metal-grad)" stroke-width="6"/>
+      <path d="M 50,15 L 50,25 M 50,75 L 50,85 M 15,50 L 25,50 M 75,50 L 85,50 M 25,25 L 33,33 M 67,67 L 75,75 M 25,75 L 33,67 M 67,33 L 75,25" stroke="url(#metal-grad)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M 42,42 L 58,50 L 42,58 Z" fill="#fff"/>
+    </g>
+
+    <!-- Text -->
+    <text x="185" y="50" text-anchor="middle" fill="url(#metal-grad)" font-family="'Orbitron', sans-serif" font-weight="900" font-size="28" letter-spacing="1">METAL SLUG</text>
+    <text x="185" y="76" text-anchor="middle" fill="#fff" font-family="'Rajdhani', sans-serif" font-weight="700" font-size="16" letter-spacing="4">AWAKENING</text>
+  </g>
+</svg>

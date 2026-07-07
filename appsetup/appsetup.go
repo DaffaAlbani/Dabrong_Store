@@ -96,13 +96,6 @@ func Setup() *fiber.App {
 		return c.Send(fileContent)
 	})
 
-	// 1. Customer Frontend (Public)
-	app.Use("/", filesystem.New(filesystem.Config{
-		Root:   http.FS(publicFS),
-		Browse: false,
-		Index:  "index.html",
-	}))
-
 	// ============================================================
 	//  API ROUTES
 	// ============================================================
@@ -162,6 +155,13 @@ func Setup() *fiber.App {
 	adminAPI.Post("/products", handlers.AdminAddProduct)
 	adminAPI.Put("/products/:product_id", handlers.AdminUpdateProduct)
 	adminAPI.Delete("/products/:product_id", handlers.AdminDeleteProduct)
+
+	// 1. Customer Frontend (Public) - registered last as wildcard fallback
+	app.Use("/", filesystem.New(filesystem.Config{
+		Root:   http.FS(publicFS),
+		Browse: false,
+		Index:  "index.html",
+	}))
 
 	return app
 }

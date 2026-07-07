@@ -16,11 +16,11 @@ func Setup() *fiber.App {
 	// Load environment variables dari .env
 	_ = godotenv.Load() // Ignore error on production/Vercel where .env file is missing
 
-	// Detect if running on Vercel
+	// Detect if running on Vercel or AWS Lambda
 	dbPath := "./orders.db"
-	if os.Getenv("VERCEL") == "1" {
-		dbPath = "/tmp/orders.db"
-		log.Println("[INFO] Running on Vercel. Database path set to /tmp/orders.db")
+	if os.Getenv("VERCEL") != "" || os.Getenv("NOW_REGION") != "" || os.Getenv("LAMBDA_TASK_ROOT") != "" {
+		dbPath = "file::memory:?cache=shared"
+		log.Println("[INFO] Serverless environment detected. Database path set to in-memory: " + dbPath)
 	}
 
 	// Inisialisasi Database SQLite

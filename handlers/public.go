@@ -251,25 +251,6 @@ func GetProducts(c *fiber.Ctx) error {
 		}
 	}
 
-	// Ambil persentase markup dari .env (default 0.07%)
-	markupStr := os.Getenv("PRICE_MARKUP_PERCENT")
-	if markupStr == "" {
-		markupStr = "0.07"
-	}
-	markupPercent, err := strconv.ParseFloat(markupStr, 64)
-	if err != nil {
-		markupPercent = 0.07
-	}
-
-	// Hitung harga jual otomatis jika original_price (Harga Modal) diisi
-	for i := range cached {
-		if cached[i].OriginalPrice > 0 {
-			calcPrice := float64(cached[i].OriginalPrice) * (1.0 + (markupPercent / 100.0))
-			// Bulatkan ke atas
-			cached[i].Price = int(calcPrice + 0.999)
-		}
-	}
-
 	return c.JSON(fiber.Map{
 		"success":  true,
 		"products": cached,

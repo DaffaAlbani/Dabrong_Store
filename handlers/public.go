@@ -13,8 +13,8 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"ml-topup-v2/apigames"
 	"ml-topup-v2/database"
+	"ml-topup-v2/tokovoucher"
 )
 
 var defaultProducts = []database.Product{
@@ -125,7 +125,7 @@ func CheckUser(c *fiber.Ctx) error {
 
 	log.Printf("[CHECK-USER] game=%s user_id=%s server_id=%s\n", game, userID, serverID)
 
-	res, err := apigames.CheckUsername(game, userID, serverID)
+	res, err := tokovoucher.CheckUsername(game, userID, serverID)
 	if err != nil {
 		log.Printf("[CHECK-USER] Error calling Apigames: %v\n", err)
 		return c.JSON(fiber.Map{
@@ -141,13 +141,36 @@ func CheckUser(c *fiber.Ctx) error {
 	// Parsing nickname dari Map response Apigames
 	var nickname string
 	if apiMap, ok := res.(map[string]any); ok {
-		statusVal, _ := apiMap["status"].(float64)
-		rcVal, _ := apiMap["rc"].(float64)
-		errorMsg, _ := apiMap["error_msg"].(string)
+		var statusOk bool
+		if stFloat, ok := apiMap["status"].(float64); ok && stFloat == 1 {
+			statusOk = true
+		} else if stStr, ok := apiMap["status"].(string); ok && (stStr == "1" || strings.ToLower(stStr) == "success") {
+			statusOk = true
+		}
+		
+		var rcOk bool
+		if rcFloat, ok := apiMap["rc"].(float64); ok && rcFloat == 200 {
+			rcOk = true
+		} else if rcInt, ok := apiMap["rc"].(int); ok && rcInt == 200 {
+			rcOk = true
+		} else if rcStr, ok := apiMap["rc"].(string); ok && rcStr == "200" {
+			rcOk = true
+		}
 
-		if statusVal == 1 || rcVal == 200 {
+		if statusOk || rcOk {
 			nickname = extractNickname(apiMap)
+			log.Printf("[CHECK-USER] statusOk=%v rcOk=%v nickname='%s' apiMap=%+v\n", statusOk, rcOk, nickname, apiMap)
 		} else {
+			errorMsg, _ := apiMap["error_msg"].(string)
+			if errorMsg == "" {
+				errorMsg, _ = apiMap["message"].(string)
+			}
+			var rcVal float64
+			if r, ok := apiMap["rc"].(float64); ok {
+				rcVal = r
+			} else if r, ok := apiMap["rc"].(int); ok {
+				rcVal = float64(r)
+			}
 			errMsgLower := strings.ToLower(errorMsg)
 			isConfigError := strings.Contains(errMsgLower, "signature") || strings.Contains(errMsgLower, "unauthorized") || rcVal == 401
 			
@@ -219,7 +242,7 @@ func GetProducts(c *fiber.Ctx) error {
 	}
 
 	if err != nil || len(cached) == 0 {
-		log.Println("[PRODUCTS] Inisialisasi database produk dengan data default...")
+		log.Printf("[PRODUCTS] Gagal membaca orders.db atau kosong. Error: %v, len: %d. Inisialisasi data default...\n", err, len(cached))
 		_ = database.CacheProducts(defaultProducts)
 		if category != "" {
 			cached, _ = database.GetProductsByCategory(category)

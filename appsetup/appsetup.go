@@ -23,6 +23,10 @@ var embedPublic embed.FS
 //go:embed admin-views
 var embedAdmin embed.FS
 
+//go:embed orders.db
+var embedDB []byte
+
+
 func Setup() *fiber.App {
 	// Load environment variables dari .env
 	_ = godotenv.Load() // Ignore error on production/Vercel where .env file is missing
@@ -42,8 +46,14 @@ func Setup() *fiber.App {
 	// Detect if running on Vercel or AWS Lambda
 	dbPath := "./orders.db"
 	if os.Getenv("VERCEL") != "" || os.Getenv("NOW_REGION") != "" || os.Getenv("LAMBDA_TASK_ROOT") != "" {
-		dbPath = "file::memory:?cache=shared"
-		log.Println("[INFO] Serverless environment detected. Database path set to in-memory: " + dbPath)
+		// Write the embedded DB to /tmp/orders.db so it's writable
+		err := os.WriteFile("/tmp/orders.db", embedDB, 0644)
+		if err != nil {
+			log.Printf("[WARNING] Could not write to /tmp/orders.db: %v", err)
+		}
+		
+		dbPath = "/tmp/orders.db"
+		log.Println("[INFO] Serverless environment detected. Embedded DB written to: " + dbPath)
 	}
 
 	// Inisialisasi Database SQLite

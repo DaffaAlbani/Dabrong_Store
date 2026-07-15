@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"ml-topup-v2/apigames"
 	"ml-topup-v2/database"
 	"ml-topup-v2/middleware"
+	"ml-topup-v2/tokovoucher"
 )
 
 type AdminLoginRequest struct {
@@ -83,8 +83,8 @@ func AdminStats(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"success": false, "message": "Gagal mengambil statistik order"})
 	}
 
-	// Cek saldo Apigames
-	balanceRes, err := apigames.CheckBalance()
+	// Cek saldo Tokovoucher
+	balanceRes, err := tokovoucher.CheckBalance()
 	var balanceData any
 	if err == nil {
 		if balMap, ok := balanceRes.(map[string]any); ok {
@@ -95,7 +95,7 @@ func AdminStats(c *fiber.Ctx) error {
 			}
 		}
 	} else {
-		log.Printf("[ADMIN-STATS-WARN] Gagal mengambil saldo Apigames: %v\n", err)
+		log.Printf("[ADMIN-STATS-WARN] Gagal mengambil saldo Tokovoucher: %v\n", err)
 	}
 
 	return c.JSON(fiber.Map{
@@ -173,10 +173,10 @@ func AdminConfirmOrder(c *fiber.Ctx) error {
 	_ = database.UpdateOrderStatus(order.OrderNo, "PROSES", "PROSES", "Sedang diproses oleh admin")
 	log.Printf("[ADMIN-CONFIRM] %s → PROSES\n", order.OrderNo)
 
-	// Kirim transaksi ke Apigames
-	res, err := apigames.SendTransaction(order.OrderNo, order.ProductID, order.PlayerID, order.ServerID)
+	// Kirim transaksi ke Tokovoucher
+	res, err := tokovoucher.SendTransaction(order.OrderNo, order.ProductID, order.PlayerID, order.ServerID)
 	if err != nil {
-		log.Printf("[APIGAMES-ERROR] Gagal mengirim transaksi ke Apigames: %v\n", err)
+		log.Printf("[TOKOVOUCHER-ERROR] Gagal mengirim transaksi ke Tokovoucher: %v\n", err)
 		_ = database.UpdateOrderStatus(order.OrderNo, "GAGAL", "FAILED_API", "Error API: "+err.Error())
 		
 		// Kembalikan saldo jika transaksi dibayar dengan saldo
@@ -184,11 +184,11 @@ func AdminConfirmOrder(c *fiber.Ctx) error {
 
 		return c.JSON(fiber.Map{
 			"success": false,
-			"message": "Gagal mengirim ke Apigames: " + err.Error(),
+			"message": "Gagal mengirim ke Tokovoucher: " + err.Error(),
 		})
 	}
 
-	log.Printf("[APIGAMES-RESPONSE] %s: %v\n", order.OrderNo, res)
+	log.Printf("[TOKOVOUCHER-RESPONSE] %s: %v\n", order.OrderNo, res)
 
 	if apiMap, ok := res.(map[string]any); ok {
 		statusVal, _ := apiMap["status"].(float64)
@@ -222,10 +222,10 @@ func AdminConfirmOrder(c *fiber.Ctx) error {
 				"success":  true,
 				"message":  "Diamond berhasil dikirim ke player!",
 				"order":    updatedOrder,
-				"apigames": apiMap,
+				"tokovoucher": apiMap,
 			})
 		} else {
-			// Gagal di Apigames
+			// Gagal di Tokovoucher
 			_ = database.UpdateOrderStatus(order.OrderNo, "GAGAL", "FAILED_PROVIDER", errorMsg)
 			
 			// Refund saldo jika transaksi dibayar dengan saldo
@@ -235,13 +235,13 @@ func AdminConfirmOrder(c *fiber.Ctx) error {
 
 			return c.JSON(fiber.Map{
 				"success": false,
-				"message": "Gagal dari Apigames: " + errorMsg,
+				"message": "Gagal dari Tokovoucher: " + errorMsg,
 				"order":   updatedOrder,
 			})
 		}
 	}
 
-	return c.JSON(fiber.Map{"success": false, "message": "Format respons Apigames tidak dikenal"})
+	return c.JSON(fiber.Map{"success": false, "message": "Format respons Tokovoucher tidak dikenal"})
 }
 
 func refundUserIfSaldoPaid(order database.Order) {
@@ -275,9 +275,9 @@ func AdminCheckTrx(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"success": false, "message": "Order tidak ditemukan"})
 	}
 
-	res, err := apigames.CheckTransactionStatus(order.OrderNo)
+	res, err := tokovoucher.CheckTransactionStatus(order.OrderNo)
 	if err != nil {
-		return c.JSON(fiber.Map{"success": false, "message": "Gagal cek status ke Apigames: " + err.Error()})
+		return c.JSON(fiber.Map{"success": false, "message": "Gagal cek status ke Tokovoucher: " + err.Error()})
 	}
 
 	if apiMap, ok := res.(map[string]any); ok {

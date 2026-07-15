@@ -1,0 +1,110 @@
+[
+  {
+    "id": "AGML",
+    "name": "Mobile Legends",
+    "match": [
+      "MLBB",
+      "KPMLBB",
+      "MLD",
+      "MCGG",
+      "MLVN",
+      "MLBBND",
+      "MLBR",
+      "GPMBL",
+      "MLA"
+    ]
+  },
+  {
+    "id": "AGFF",
+    "name": "Free Fire",
+    "match": [
+      "FF",
+      "MFF",
+      "KPPFF",
+      "PFF"
+    ]
+  },
+  {
+    "id": "AGPUBG",
+    "name": "PUBG Mobile",
+    "match": [
+      "PUBGM",
+      "PUBGMKP",
+      "PMI",
+      "PMG"
+    ]
+  },
+  {
+    "id": "AGCODM",
+    "name": "Call of Duty Mobile",
+    "match": [
+      "CODM"
+    ]
+  },
+  {
+    "id": "AGVALO",
+    "name": "Valorant",
+    "match": [
+      "VALO"
+    ]
+  },
+  {
+    "id": "AGHAGO",
+    "name": "Hago",
+    "match": [
+      "KPHAGO",
+      "NHAGO",
+      "HAGO",
+      "HFHG"
+    ]
+  },
+  {
+    "id": "AGLM",
+    "name": "Lords Mobile",
+    "match": [
+      "LM"
+    ]
+  },
+  {
+    "id": "AGDANA",
+    "name": "DANA E-Wallet",
+    "match": [
+      "DANA"
+    ]
+  },
+  {
+    "id": "AGROX",
+    "name": "Ragnarok X",
+    "match": [
+      "ROX"
+    ]
+  },
+  {
+    "id": "AGMUO",
+    "name": "MU Origin",
+    "match": [
+      "MUO"
+    ]
+  },
+  {
+    "id": "AGPB",
+    "name": "Point Blank",
+    "match": [
+      "PB"
+    ]
+  },
+  {
+    "id": "AGBS",
+    "name": "Brawl Stars",
+    "match": [
+      "BS"
+    ]
+  },
+  {
+    "id": "AGGI",
+    "name": "Genshin Impact",
+    "match": [
+      "GI"
+    ]
+  }
+]

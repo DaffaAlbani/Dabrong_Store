@@ -1,7 +1,7 @@
 .env
-orders.db
-orders.db-shm
-orders.db-wal
+# orders.db
+# orders.db-shm
+# orders.db-wal
 server
 node_modules/
 .local-go/

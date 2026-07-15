@@ -3,13 +3,16 @@
   "builds": [
     {
       "src": "api/index.go",
-      "use": "@vercel/go"
+      "use": "@vercel/go",
+      "config": {
+        "includeFiles": "orders.db*"
+      }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "api/index.go"
+      "source": "/(.*)",
+      "destination": "/api/index.go"
     }
   ]
 }

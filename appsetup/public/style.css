@@ -654,3 +654,12 @@ ul{list-style:none}
 }
 
 
+/* NAVBAR RESPONSIVE FIX */
+@media(max-width:768px){
+  .nav-links{background: rgba(255,255,255,.97) !important;}
+  .theme-toggle-btn{margin-left: auto !important;}
+}
+body.dark-mode .nav-links{
+  background: rgba(8, 8, 15, 0.97) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+}

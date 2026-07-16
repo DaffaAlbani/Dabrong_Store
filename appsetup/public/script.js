@@ -857,7 +857,7 @@ document.addEventListener('DOMContentLoaded', () => {
     pkgGrid.innerHTML = '';
 
     try {
-      const res  = await fetch(`/api/products?category=${s.selectedCategory}`);
+      const res  = await fetch(`/api/products?category=${s.selectedCategory}&t=${Date.now()}`);
       const data = await res.json();
 
       if (data.success && data.products?.length > 0) {

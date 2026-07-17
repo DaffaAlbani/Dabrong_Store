@@ -585,3 +585,28 @@ body.light-mode .nav-links {
 @media(min-width: 600px) {
   .unipin-card .form-row { flex-direction: row; }
 }
+
+@media(max-width: 576px) {
+  .pkg-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .pkg-card {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .pkg-gem {
+    font-size: 1.4rem;
+  }
+  .pkg-amt {
+    font-size: 0.9rem;
+  }
+  .pkg-price {
+    font-size: 0.9rem;
+  }
+  .pkg-amt.pass-text {
+    font-size: 0.72rem;
+  }
+}
+

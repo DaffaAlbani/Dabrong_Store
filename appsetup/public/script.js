@@ -580,7 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const uidInp   = document.getElementById('inp-uid');
   const srvInp   = document.getElementById('inp-srv');
   const btnVer   = document.getElementById('btn-verify');
-  const btnS1Nxt = document.getElementById('btn-s1-next');
+  const btnS1Nxt = document.getElementById('btn-s1-next') || document.createElement('button');
   const vCard    = document.getElementById('verified-card');
   const vcName   = document.getElementById('vc-name');
   const vcId     = document.getElementById('vc-id');
@@ -667,8 +667,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const pkgLoad  = document.getElementById('pkg-loading');
   const pkgErr   = document.getElementById('pkg-error');
   const selPkg   = document.getElementById('sel-pkg');
-  const btnS2Bk  = document.getElementById('btn-s2-back');
-  const btnS2Nxt = document.getElementById('btn-s2-next');
+  const btnS2Bk  = document.getElementById('btn-s2-back') || document.createElement('button');
+  const btnS2Nxt = document.getElementById('btn-submit-order') || document.getElementById('btn-s2-next') || document.createElement('button');
 
   async function loadPackages() {
     if (s.packages.length > 0) { renderPkgs(); return; }

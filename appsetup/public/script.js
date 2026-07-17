@@ -701,6 +701,7 @@ document.addEventListener('DOMContentLoaded', () => {
       pkgLoad.classList.add('hidden');
       updateFilterButtons();
       renderPkgs();
+      updateCheckoutSummary();
     }
   }
 
@@ -720,6 +721,39 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.classList.add('hidden');
       }
     });
+  }
+
+  function updateCheckoutSummary() {
+    const summaryItem = document.getElementById('summary-item');
+    const summaryPayment = document.getElementById('summary-payment');
+    const checkoutTotal = document.getElementById('checkout-total-price');
+
+    if (summaryItem) {
+      if (s.selectedPkg) {
+        const isPass = !s.selectedPkg.diamond || s.selectedPkg.diamond === 0;
+        summaryItem.textContent = isPass ? s.selectedPkg.product_name : `💎 ${(s.selectedPkg.diamond||0).toLocaleString('id-ID')} Diamond`;
+      } else {
+        summaryItem.textContent = '—';
+      }
+    }
+
+    if (summaryPayment) {
+      if (s.paymentMethod === 'bank_transfer') {
+        summaryPayment.textContent = '🏦 Transfer Bank BCA';
+      } else if (s.paymentMethod === 'qris') {
+        summaryPayment.textContent = '🛡️ QRIS (E-Wallet & Bank)';
+      } else {
+        summaryPayment.textContent = '—';
+      }
+    }
+
+    if (checkoutTotal) {
+      if (s.selectedPkg) {
+        checkoutTotal.textContent = fmt(s.selectedPkg.price);
+      } else {
+        checkoutTotal.textContent = 'Rp 0';
+      }
+    }
   }
 
   function renderPkgs() {
@@ -742,9 +776,11 @@ document.addEventListener('DOMContentLoaded', () => {
              title="${pkg.product_name}">
           ${badgeTxt ? `<div class="pkg-badge ${badgeCls}">${badgeTxt}</div>` : ''}
           <div class="pkg-gem">${gemIcon}</div>
-          <div class="pkg-amt ${isPass ? 'pass-text' : ''}">${displayAmt}</div>
-          <div class="pkg-bonus">${pkg.bonus || '\u00a0'}</div>
-          <div class="pkg-price">${fmt(pkg.price)}</div>
+          <div class="pkg-info-col">
+            <div class="pkg-amt ${isPass ? 'pass-text' : ''}">${displayAmt}</div>
+            <div class="pkg-price">${fmt(pkg.price)}</div>
+          </div>
+          ${pkg.bonus && pkg.bonus !== '\u00a0' ? `<div class="pkg-bonus">${pkg.bonus}</div>` : ''}
         </div>`;
     }).join('');
   }
@@ -782,6 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.payment-method-card').forEach(c => c.classList.remove('active'));
       card.classList.add('active');
       s.paymentMethod = card.dataset.method;
+      updateCheckoutSummary();
     });
   });
 

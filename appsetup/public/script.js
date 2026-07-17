@@ -134,6 +134,9 @@ const FALLBACK_PACKAGES = [
 ];
 
 function categorize(pkg) {
+  if (!pkg.diamond || pkg.diamond === 0) {
+    return 'subscription';
+  }
   const p = pkg.price || 0;
   if (p <= 50000)  return 'starter';
   if (p <= 150000) return 'mid';
@@ -695,6 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } finally {
       pkgLoad.classList.add('hidden');
+      updateFilterButtons();
       renderPkgs();
     }
   }
@@ -702,6 +706,19 @@ document.addEventListener('DOMContentLoaded', () => {
   function extractDiamond(name = '') {
     const m = name.match(/(\d[\d,\.]*)/);
     return m ? parseInt(m[1].replace(/[,\.]/g, '')) : 0;
+  }
+
+  function updateFilterButtons() {
+    const catsPresent = new Set(s.packages.map(p => p.cat));
+    document.querySelectorAll('.pf').forEach(btn => {
+      const filter = btn.dataset.cat;
+      if (filter === 'all') return;
+      if (catsPresent.has(filter)) {
+        btn.classList.remove('hidden');
+      } else {
+        btn.classList.add('hidden');
+      }
+    });
   }
 
   function renderPkgs() {

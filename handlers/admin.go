@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"encoding/json"
 	"log"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -374,6 +376,36 @@ func AdminAddProduct(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{"success": true, "message": "Produk berhasil ditambahkan", "product": created})
+}
+
+// POST /api/admin/products/sync
+func AdminSyncProducts(c *fiber.Ctx) error {
+	cmd := exec.Command("python3", "sync_api.py")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"success": false,
+			"message": "Gagal menjalankan sync_api.py: " + err.Error(),
+			"output": string(out),
+		})
+	}
+	
+	// Parse out JSON from the output lines
+	lines := strings.Split(string(out), "\n")
+	var result map[string]any
+	for _, line := range lines {
+		if strings.HasPrefix(line, "{") && strings.Contains(line, "synced_count") {
+			if json.Unmarshal([]byte(line), &result) == nil {
+				return c.JSON(result)
+			}
+		}
+	}
+	
+	return c.JSON(fiber.Map{
+		"success": true, 
+		"synced_count": 0,
+		"message": "Sinkronisasi selesai (output format tidak dikenali)",
+	})
 }
 
 // PUT /api/admin/products/:product_id

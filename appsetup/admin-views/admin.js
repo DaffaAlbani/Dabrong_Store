@@ -251,6 +251,25 @@ document.getElementById('btn-add-product').addEventListener('click', () => {
   showProductModal();
 });
 
+// Bind Sync API button
+document.getElementById('btn-sync-api').addEventListener('click', async () => {
+  if(!confirm('Apakah Anda yakin ingin menyinkronkan seluruh harga dengan Tokovoucher? (Harga modal dan jual akan diupdate)')) return;
+  
+  showToast('⏳ Sedang menyinkronkan data dengan API Tokovoucher...', '⏳');
+  try {
+    const res = await fetch('/api/admin/products/sync', { method: 'POST' });
+    const data = await res.json();
+    if (data.success) {
+      showToast(`✅ Berhasil! ${data.synced_count} produk tersinkronisasi.`);
+      loadProducts();
+    } else {
+      showToast(`❌ Gagal: ${data.message}`, '❌');
+    }
+  } catch (err) {
+    showToast('❌ Terjadi kesalahan jaringan.', '❌');
+  }
+});
+
 async function loadProducts() {
   try {
     const res  = await fetch('/api/products');

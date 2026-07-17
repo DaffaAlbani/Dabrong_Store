@@ -142,13 +142,16 @@ function categorize(pkg) {
   const diamond = pkg.diamond !== undefined ? pkg.diamond : extractDiamondGlobal(pkg.product_name || '');
   
   const nameLower = (pkg.product_name || '').toLowerCase();
-  const isSub = !diamond || diamond === 0 || 
-                nameLower.includes('pass') || 
+  const isSub = nameLower.includes('pass') || 
                 nameLower.includes('weekly') || 
                 nameLower.includes('monthly') || 
+                nameLower.includes('minggu') || 
+                nameLower.includes('bulan') || 
                 nameLower.includes('starlight') || 
                 nameLower.includes('membership') || 
-                nameLower.includes('premium');
+                nameLower.includes('member') || 
+                nameLower.includes('premium') ||
+                nameLower.includes('twilight');
                 
   if (isSub) {
     return 'subscription';
@@ -533,7 +536,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!config) return;
 
     // 1. Update text and titles
-    document.getElementById('form-game-title').textContent = config.title;
+    const titleEl = document.getElementById('gh-title');
+    if (titleEl) titleEl.textContent = config.title;
+    
     document.getElementById('lbl-uid').textContent = config.idLabel + ' *';
     document.getElementById('inp-uid').placeholder = config.idPlaceholder;
     document.getElementById('hint-uid').textContent = config.idHint;
@@ -767,7 +772,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (summaryItem) {
       if (s.selectedPkg) {
-        const isPass = !s.selectedPkg.diamond || s.selectedPkg.diamond === 0;
+        const isPass = !s.selectedPkg.diamond || s.selectedPkg.diamond === 0 || s.selectedPkg.cat === 'subscription';
         summaryItem.textContent = isPass ? s.selectedPkg.product_name : `💎 ${(s.selectedPkg.diamond||0).toLocaleString('id-ID')} Diamond`;
       } else {
         summaryItem.textContent = '—';
@@ -800,9 +805,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const badgeTxt = pkg.product_name?.toLowerCase().includes('1195') || pkg.product_name?.toLowerCase().includes('514') ? 'POPULAR' : '';
       const badgeCls = badgeTxt === 'HOT' ? 'hot' : badgeTxt === 'POPULAR' ? 'pop' : '';
       
-      // If product has 0 diamonds (like passes, memberships, etc.), show the cleaned product name
+      // If product is a subscription or has 0 diamonds, show the cleaned product name
       const rawName = pkg.product_name || pkg.product_id;
-      const isPass = !pkg.diamond || pkg.diamond === 0;
+      const isPass = !pkg.diamond || pkg.diamond === 0 || pkg.cat === 'subscription';
       const displayAmt = isPass ? rawName : pkg.diamond.toLocaleString('id-ID');
       const gemIcon = isPass ? '🎫' : '💎';
 
@@ -828,7 +833,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPkgs();
     if (s.selectedPkg) {
       selPkg.classList.remove('hidden');
-      const isPass = !s.selectedPkg.diamond || s.selectedPkg.diamond === 0;
+      const isPass = !s.selectedPkg.diamond || s.selectedPkg.diamond === 0 || s.selectedPkg.cat === 'subscription';
       const displayInfo = isPass ? s.selectedPkg.product_name : `💎 ${(s.selectedPkg.diamond||0).toLocaleString('id-ID')} Diamond${s.selectedPkg.bonus ? ' ' + s.selectedPkg.bonus : ''}`;
       document.getElementById('sel-pkg-info').textContent = displayInfo;
       document.getElementById('sel-pkg-price').textContent = fmt(s.selectedPkg.price);

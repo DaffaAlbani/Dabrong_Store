@@ -99,7 +99,7 @@ def is_foreign_region(code, name):
         if curr in code_upper:
             return True
             
-    foreign_keywords = ["global", "malaysia", "singapore", "philippines", "vietnam", "thailand", "cambodia", "brazil", "turkey", "bangladesh", "hong kong", "myr", "sgd", "usd", "hkd", "php"]
+    foreign_keywords = ["malaysia", "singapore", "philippines", "vietnam", "thailand", "cambodia", "brazil", "turkey", "bangladesh", "hong kong", "myr", "sgd", "usd", "hkd", "php"]
     for kw in foreign_keywords:
         if kw in name_lower:
             return True
@@ -170,6 +170,14 @@ for i, row in enumerate(rows[1:]): # Lewati baris header pertama
             
         if cat:
             price_val = int(harga) if harga.isdigit() else 0
+            
+            # Hitung markup harga (misal profit 3%, minimal 500)
+            margin = price_val * 0.03
+            if margin < 500:
+                margin = 500
+            selling_price = price_val + margin
+            selling_price = ((int(selling_price) + 99) // 100) * 100
+            
             # Saring produk "Cek ID" (harga sangat murah/kurang dari 100) atau produk tidak valid
             if price_val < 100 or "cek" in name_lower or "check" in name_lower:
                 skipped_count += 1
@@ -180,7 +188,7 @@ for i, row in enumerate(rows[1:]): # Lewati baris header pertama
                 "product_name": nama_produk,
                 "category": cat,
                 "original_price": price_val,
-                "price": price_val,
+                "price": int(selling_price),
             })
 
 # Pengelompokan denominasi untuk menyaring duplikat & mengambil harga termurah
@@ -201,7 +209,12 @@ for cat, items in parsed_by_cat.items():
         elif "welkin" in name_lower:
             key = "welkin_moon"
         else:
-            key = extract_number(item["product_name"])
+            extracted_num = extract_number(item["product_name"])
+            if extracted_num == 0:
+                # Jika tidak ada angka, gunakan nama bersihnya sebagai kunci (menghindari produk tanpa angka saling tertimpa)
+                key = clean_product_name(item["product_name"], cat, categories_map[cat]).lower()
+            else:
+                key = extracted_num
             
         denom_groups[key].append(item)
         

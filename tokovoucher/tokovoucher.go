@@ -36,9 +36,15 @@ type TokovoucherResponse struct {
 func CheckUsername(game, userID, serverID string) (any, error) {
 	g := strings.ToLower(game)
 	isML := strings.Contains(g, "legend") || g == "ml" || g == "mlbb"
+	isFF := g == "ff" || g == "free fire" || g == "freefire"
 
-	if isML {
-		url := fmt.Sprintf("https://api.isan.eu.org/nickname/ml?id=%s&zone=%s", userID, serverID)
+	if isML || isFF {
+		var url string
+		if isML {
+			url = fmt.Sprintf("https://api.isan.eu.org/nickname/ml?id=%s&zone=%s", userID, serverID)
+		} else {
+			url = fmt.Sprintf("https://api.isan.eu.org/nickname/ff?id=%s", userID)
+		}
 		
 		client := &http.Client{Timeout: 10 * time.Second}
 		resp, err := client.Get(url)
@@ -49,15 +55,18 @@ func CheckUsername(game, userID, serverID string) (any, error) {
 			if json.Unmarshal(body, &apiResp) == nil {
 				// Cek jika success = true
 				if success, ok := apiResp["success"].(bool); ok && success {
-					if name, ok := apiResp["name"].(string); ok && name != "" {
-						return map[string]any{
-							"status": "success",
-							"rc":     200,
-							"data": map[string]any{
-								"username": name,
-							},
-						}, nil
+					name, _ := apiResp["name"].(string)
+					// Kalau FF mungkin tidak return name secara explicit, fallback ke "Valid"
+					if name == "" {
+						name = "ID Valid"
 					}
+					return map[string]any{
+						"status": "success",
+						"rc":     200,
+						"data": map[string]any{
+							"username": name,
+						},
+					}, nil
 				} else {
 					// Berarti ID tidak ditemukan dari API ini
 					return map[string]any{
@@ -69,7 +78,7 @@ func CheckUsername(game, userID, serverID string) (any, error) {
 					}, nil
 				}
 			}
-			return nil, fmt.Errorf("invalid response from ML API")
+			return nil, fmt.Errorf("invalid response from API")
 		}
 		return nil, err
 	}

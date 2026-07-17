@@ -180,6 +180,7 @@ func Setup() *fiber.App {
 	adminAPI.Post("/reject", handlers.AdminRejectOrder)
 	
 	// CRUD Produk manual via Admin
+	adminAPI.Post("/products/sync", handlers.AdminSyncProducts)
 	adminAPI.Post("/products", handlers.AdminAddProduct)
 	adminAPI.Put("/products/:product_id", handlers.AdminUpdateProduct)
 	adminAPI.Delete("/products/:product_id", handlers.AdminDeleteProduct)

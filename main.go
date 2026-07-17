@@ -17,6 +17,6 @@ func main() {
 		port = "3000"
 	}
 
-	log.Printf("[SERVER] Server Golang berjalan di http://localhost:%s\n", port)
+	log.Printf("[SERVER] Server Full Next.js berjalan di http://localhost:%s\n", port)
 	log.Fatal(app.Listen(":" + port))
 }

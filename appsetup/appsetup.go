@@ -63,7 +63,7 @@ func Setup() *fiber.App {
 	}
 
 	app := fiber.New(fiber.Config{
-		AppName: "Dabrong Top-Up ML Golang Backend",
+		AppName: "Dabrong Top-Up ML Full Next.js",
 	})
 
 	// Logger middleware untuk melihat request log di terminal

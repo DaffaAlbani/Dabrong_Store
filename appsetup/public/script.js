@@ -567,8 +567,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetForm() {
     document.getElementById('panel-invoice').classList.remove('active');
     document.getElementById('panel-combined').classList.add('active');
-  }
-  );
     const topup = document.getElementById('topup');
     if (topup) setTimeout(() => {
       const off = document.getElementById('navbar')?.offsetHeight || 70;

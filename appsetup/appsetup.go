@@ -29,7 +29,7 @@ var embedDB []byte
 
 func Setup() *fiber.App {
 	// Force Vercel Go compiler to rebuild and embed the updated orders.db
-	_ = "db_version_2"
+	_ = "db_version_3"
 	// Load environment variables dari .env
 	_ = godotenv.Load() // Ignore error on production/Vercel where .env file is missing
 

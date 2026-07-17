@@ -134,7 +134,8 @@ const FALLBACK_PACKAGES = [
 ];
 
 function categorize(pkg) {
-  if (!pkg.diamond || pkg.diamond === 0) {
+  const diamond = pkg.diamond !== undefined ? pkg.diamond : extractDiamond(pkg.product_name);
+  if (!diamond || diamond === 0) {
     return 'subscription';
   }
   const p = pkg.price || 0;

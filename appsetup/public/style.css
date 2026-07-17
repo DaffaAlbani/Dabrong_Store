@@ -392,3 +392,7 @@ body.light-mode .howid-btn { background: rgba(139, 92, 246, 0.1); color: var(--p
 body.light-mode .howid-list { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.1); color: var(--text); }
 body.light-mode .cara-card { box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
 body.light-mode .faq-q { color: var(--text); }
+body.light-mode .nav-links {
+  background: rgba(248, 250, 252, 0.98) !important;
+  border-left: 1px solid rgba(0, 0, 0, 0.08) !important;
+}

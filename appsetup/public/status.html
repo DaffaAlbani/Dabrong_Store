@@ -4,11 +4,17 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cek Status Order — Dabrong Store</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=Orbitron:wght@700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/style.css"/>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+  <script>
+    if (localStorage.getItem('theme') === 'light-mode') {
+      document.documentElement.classList.add('light-mode');
+      document.body.classList.add('light-mode');
+    }
+  </script>
   <canvas id="bg-canvas"></canvas>
 
   <header class="navbar" id="navbar">
@@ -16,7 +22,7 @@
       <a href="/" class="logo">
         <i data-lucide="gem" class="logo-gem-icon"></i>
         <div>
-          <span class="logo-main">Dabrong<span class="gold"> Store</span></span>
+          <span class="logo-main">Dabrong<span class="primary-text"> Store</span></span>
           <span class="logo-sub">Top-Up Center</span>
         </div>
       </a>
@@ -25,6 +31,8 @@
         <a href="/#marketplace" class="nav-a">Katalog</a>
         <a href="/status" class="nav-a active">Cek Order</a>
       </nav>
+            
+      
       <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     </div>
   </header>
@@ -33,7 +41,7 @@
     <div class="container container-sm">
       <div class="sec-hd">
         <span class="sec-tag"><i data-lucide="search" class="icon-inline"></i> Lacak Pesanan</span>
-        <h2 class="sec-title">Cek Status <span class="gold">Order</span></h2>
+        <h2 class="sec-title">Cek Status <span class="primary-text">Order</span></h2>
         <p class="sec-desc">Masukkan No. Order yang kamu terima saat melakukan pemesanan</p>
       </div>
 

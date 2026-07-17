@@ -6,11 +6,17 @@
   <meta name="description" content="Top-up Diamond Mobile Legends tercepat dan termurah. Proses instan, aman, dan terpercaya."/>
   <title>Dabrong Store — Top-Up Diamond Mobile Legends</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/style.css?v=3"/>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+  <script>
+    if (localStorage.getItem('theme') === 'light-mode') {
+      document.documentElement.classList.add('light-mode');
+      document.body.classList.add('light-mode');
+    }
+  </script>
 
   <!-- PARTICLES -->
   <canvas id="bg-canvas"></canvas>
@@ -21,7 +27,7 @@
       <a href="/" class="logo">
         <i data-lucide="gem" class="logo-gem-icon"></i>
         <div>
-          <span class="logo-main">Dabrong<span class="gold"> Store</span></span>
+          <span class="logo-main">Dabrong<span class="primary-text"> Store</span></span>
           <span class="logo-sub">Top-Up Center</span>
         </div>
       </a>
@@ -31,12 +37,18 @@
         <a href="#cara"     class="nav-a">Cara Order</a>
         <a href="#faq"      class="nav-a">FAQ</a>
         <a href="/status"   class="nav-a">Cek Order</a>
+        
+        <button id="theme-toggle" style="background:none; border:none; color:var(--text); cursor:pointer; font-size:1.2rem; display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; transition:var(--ease); margin-right: 10px;">
+          <i data-lucide="moon" id="theme-icon"></i>
+        </button>
         <a href="#" id="nav-member-btn" class="nav-a nav-btn">Masuk / Daftar</a>
         <div id="nav-member-profile" class="nav-member-profile hidden">
           <span id="nav-username" class="nav-username">Member</span>
           <button id="nav-logout-btn" class="btn-logout">Logout</button>
         </div>
       </nav>
+            
+      
       <button class="hamburger" id="hamburger">
         <span></span><span></span><span></span>
       </button>
@@ -50,7 +62,7 @@
     <div class="hero-glow glow-3"></div>
     <div class="hero-content">
       <div class="hero-badge"><span class="dot-green"></span> Layanan Top-Up Game Terpopuler</div>
-      <h1 class="hero-title">Top Up Game <span class="gold">Favoritmu</span><br/>Tanpa Antre<br/><span class="hero-sub">Proses Otomatis 24 Jam</span></h1>
+      <h1 class="hero-title">Top Up Game <span class="primary-text">Favoritmu</span><br/>Tanpa Antre<br/><span class="hero-sub">Proses Otomatis 24 Jam</span></h1>
       <p class="hero-desc">Proses kilat tanpa delay. Cukup masukkan ID, pilih nominal, selesaikan pembayaran, dan item langsung terkirim otomatis!</p>
       <div class="hero-btns">
         <a href="#marketplace" class="btn btn-gold"><i data-lucide="zap" class="btn-icon"></i> Katalog Game</a>
@@ -64,10 +76,9 @@
     <div class="container">
       <div class="sec-hd">
         <span class="sec-tag"><i data-lucide="gamepad-2" class="icon-inline"></i> Katalog Game & Voucher</span>
-        <h2 class="sec-title">Pilih <span class="gold">Game</span> yang Ingin Kamu Top-Up</h2>
+        <h2 class="sec-title">Pilih <span class="primary-text">Game</span> yang Ingin Kamu Top-Up</h2>
       </div>
       <div class="game-grid">
-        <!-- MLBB -->
         <div class="game-card active" data-game="mobilelegends" data-category="AGML">
           <div class="game-banner" style="background:linear-gradient(135deg,#1e3c72,#2a5298)">
             <img src="images/mlbb.png" alt="Mobile Legends"/>
@@ -78,7 +89,6 @@
             <span class="game-sub">Diamond MLBB Instan</span>
           </div>
         </div>
-        <!-- Free Fire -->
         <div class="game-card" data-game="freefire" data-category="AGFF">
           <div class="game-banner" style="background:linear-gradient(135deg,#f12711,#f5af19)">
             <img src="images/freefire.png" alt="Free Fire"/>
@@ -89,8 +99,17 @@
             <span class="game-sub">Diamond FF Murah</span>
           </div>
         </div>
-        <!-- PUBG Mobile -->
-        <div class="game-card" data-game="pubg" data-category="AGPB">
+        <div class="game-card" data-game="honorofkings" data-category="AGHOK">
+          <div class="game-banner" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+            <img src="images/hok.png" alt="Honor of Kings"/>
+            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
+          </div>
+          <div class="game-info">
+            <h3 class="game-name">Honor of Kings</h3>
+            <span class="game-sub">Tokens Instan</span>
+          </div>
+        </div>
+        <div class="game-card" data-game="pubg" data-category="AGPUBG">
           <div class="game-banner" style="background:linear-gradient(135deg,#11998e,#38ef7d)">
             <img src="images/pubg.svg" alt="PUBG Mobile"/>
             <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
@@ -100,21 +119,9 @@
             <span class="game-sub">Unknown Cash UC</span>
           </div>
         </div>
-        <!-- Genshin Impact -->
-        <div class="game-card" data-game="genshin" data-category="AGGI">
-          <div class="game-banner" style="background:linear-gradient(135deg,#4b6cb7,#182848)">
-            <img src="images/genshin.svg?v=3" alt="Genshin Impact" class="logo-invert"/>
-            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
-          </div>
-          <div class="game-info">
-            <h3 class="game-name">Genshin Impact</h3>
-            <span class="game-sub">Genesis Crystal</span>
-          </div>
-        </div>
-        <!-- Valorant -->
-        <div class="game-card" data-game="valorant" data-category="AGVL">
+        <div class="game-card" data-game="valorant" data-category="AGVALO">
           <div class="game-banner" style="background:linear-gradient(135deg,#8a2387,#e94057,#f27121)">
-            <img src="images/valorant.svg?v=3" alt="Valorant" class="logo-invert"/>
+            <img src="images/valorant.svg" alt="Valorant" class="logo-invert"/>
             <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
           </div>
           <div class="game-info">
@@ -122,10 +129,19 @@
             <span class="game-sub">Riot Points VP</span>
           </div>
         </div>
-        <!-- Honkai Star Rail -->
+        <div class="game-card" data-game="genshin" data-category="AGGI">
+          <div class="game-banner" style="background:linear-gradient(135deg,#4b6cb7,#182848)">
+            <img src="images/genshin.svg" alt="Genshin Impact" class="logo-invert"/>
+            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
+          </div>
+          <div class="game-info">
+            <h3 class="game-name">Genshin Impact</h3>
+            <span class="game-sub">Genesis Crystal</span>
+          </div>
+        </div>
         <div class="game-card" data-game="starrail" data-category="AGHSR">
           <div class="game-banner" style="background:linear-gradient(135deg,#1d4ed8,#1e1b4b)">
-            <img src="images/starrail.png" alt="Honkai Star Rail"/>
+            <img src="images/starrail.png" alt="Honkai: Star Rail"/>
             <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
           </div>
           <div class="game-info">
@@ -133,10 +149,9 @@
             <span class="game-sub">Oneiric Shard</span>
           </div>
         </div>
-        <!-- CODM -->
         <div class="game-card" data-game="codm" data-category="AGCODM">
           <div class="game-banner" style="background:linear-gradient(135deg,#4b5563,#111827)">
-            <img src="images/codm.png?v=3" alt="CODM" class="logo-invert"/>
+            <img src="images/codm.png" alt="CODM" class="logo-invert"/>
             <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
           </div>
           <div class="game-info">
@@ -144,76 +159,19 @@
             <span class="game-sub">CP Call of Duty</span>
           </div>
         </div>
-        <!-- Higgs Domino -->
-        <div class="game-card" data-game="higgs" data-category="AGHD">
-          <div class="game-banner" style="background:linear-gradient(135deg,#8b5cf6,#4c1d95)">
-            <img src="images/higgs.png" alt="Higgs Domino"/>
-            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
-          </div>
-          <div class="game-info">
-            <h3 class="game-name">Higgs Domino</h3>
-            <span class="game-sub">Koin Emas / Chip</span>
-          </div>
-        </div>
-        <!-- Roblox -->
-        <div class="game-card" data-game="roblox" data-category="AGRBLX">
-          <div class="game-banner" style="background:linear-gradient(135deg,#b91c1c,#000000)">
-            <img src="images/roblox.svg?v=3" alt="Roblox" class="logo-invert"/>
-            <span class="game-badge"><i data-lucide="ticket"></i> Voucher</span>
-          </div>
-          <div class="game-info">
-            <h3 class="game-name">Roblox</h3>
-            <span class="game-sub">Robux Gift Card</span>
-          </div>
-        </div>
-        <!-- Steam Wallet -->
-        <div class="game-card" data-game="steam" data-category="AGSTM">
-          <div class="game-banner" style="background:linear-gradient(135deg,#0f172a,#1e293b)">
-            <img src="images/steam.svg?v=3" alt="Steam Wallet" class="logo-invert"/>
-            <span class="game-badge"><i data-lucide="ticket"></i> Voucher</span>
-          </div>
-          <div class="game-info">
-            <h3 class="game-name">Steam Wallet</h3>
-            <span class="game-sub">Voucher Steam Wallet</span>
-          </div>
-        </div>
-        <!-- Google Play -->
-        <div class="game-card" data-game="googleplay" data-category="AGGPL">
-          <div class="game-banner" style="background:linear-gradient(135deg,#10b981,#3b82f6)">
-            <img src="images/googleplay.svg" alt="Google Play"/>
-            <span class="game-badge"><i data-lucide="ticket"></i> Voucher</span>
-          </div>
-          <div class="game-info">
-            <h3 class="game-name">Google Play</h3>
-            <span class="game-sub">Google Play Card</span>
-          </div>
-        </div>
-        <!-- Garena Shells -->
-        <div class="game-card" data-game="garena" data-category="AGGS">
-          <div class="game-banner" style="background:linear-gradient(135deg,#e53935,#e35d5b)">
-            <img src="images/garena.png?v=3" alt="Garena Shells" class="logo-invert"/>
-            <span class="game-badge"><i data-lucide="ticket"></i> Voucher</span>
-          </div>
-          <div class="game-info">
-            <h3 class="game-name">Garena Shells</h3>
-            <span class="game-sub">Voucher Shells</span>
-          </div>
-        </div>
-        <!-- Arena of Valor -->
         <div class="game-card" data-game="aov" data-category="AGAOV">
-          <div class="game-banner" style="background:linear-gradient(135deg,#ff6b35,#d32f2f)">
-            <img src="images/aov.svg?v=3" alt="Arena of Valor"/>
+          <div class="game-banner" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">
+            <img src="images/aov.svg" alt="Arena of Valor" class="logo-invert"/>
             <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
           </div>
           <div class="game-info">
             <h3 class="game-name">Arena of Valor</h3>
-            <span class="game-sub">Voucher AOV</span>
+            <span class="game-sub">Vouchers</span>
           </div>
         </div>
-        <!-- Point Blank -->
         <div class="game-card" data-game="pointblank" data-category="AGPBL">
-          <div class="game-banner" style="background:linear-gradient(135deg,#1a237e,#37474f)">
-            <img src="images/pointblank.svg?v=3" alt="Point Blank"/>
+          <div class="game-banner" style="background:linear-gradient(135deg,#0f172a,#1e293b)">
+            <img src="images/pointblank.svg" alt="Point Blank" class="logo-invert"/>
             <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
           </div>
           <div class="game-info">
@@ -221,10 +179,9 @@
             <span class="game-sub">PB Cash</span>
           </div>
         </div>
-        <!-- Tower of Fantasy -->
-        <div class="game-card" data-game="tof" data-category="AGTOF">
-          <div class="game-banner" style="background:linear-gradient(135deg,#7c4dff,#00bcd4)">
-            <img src="images/tof.svg?v=3" alt="Tower of Fantasy"/>
+        <div class="game-card" data-game="toweroffantasy" data-category="AGTOF">
+          <div class="game-banner" style="background:linear-gradient(135deg,#14b8a6,#0f766e)">
+            <img src="images/tof.svg" alt="Tower of Fantasy" class="logo-invert"/>
             <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
           </div>
           <div class="game-info">
@@ -232,114 +189,44 @@
             <span class="game-sub">Tanium</span>
           </div>
         </div>
-        <!-- Hago -->
         <div class="game-card" data-game="hago" data-category="AGHAGO">
-          <div class="game-banner" style="background:linear-gradient(135deg,#00c853,#009688)">
-            <img src="images/hago.svg?v=3" alt="Hago"/>
+          <div class="game-banner" style="background:linear-gradient(135deg,#fcd34d,#fbbf24)">
+            <img src="images/hago.svg" alt="Hago"/>
             <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
           </div>
           <div class="game-info">
             <h3 class="game-name">Hago</h3>
-            <span class="game-sub">Diamond Hago</span>
+            <span class="game-sub">Diamonds</span>
           </div>
         </div>
-        <!-- Sausage Man -->
-        <div class="game-card" data-game="sausageman" data-category="AGSM">
-          <div class="game-banner" style="background:linear-gradient(135deg,#ffb300,#ff6d00)">
-            <img src="images/sausageman.svg?v=3" alt="Sausage Man"/>
-            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
+        <div class="game-card" data-game="roblox" data-category="AGRBLX">
+          <div class="game-banner" style="background:linear-gradient(135deg,#b91c1c,#000000)">
+            <img src="images/roblox.svg" alt="Roblox" class="logo-invert"/>
+            <span class="game-badge"><i data-lucide="ticket"></i> Voucher</span>
           </div>
           <div class="game-info">
-            <h3 class="game-name">Sausage Man</h3>
-            <span class="game-sub">Diamond</span>
+            <h3 class="game-name">Roblox</h3>
+            <span class="game-sub">Robux Gift Card</span>
           </div>
         </div>
-        <!-- Super Sus -->
-        <div class="game-card" data-game="supersus" data-category="AGSS">
-          <div class="game-banner" style="background:linear-gradient(135deg,#9c27b0,#e91e63)">
-            <img src="images/supersus.svg?v=3" alt="Super Sus"/>
-            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
+        <div class="game-card" data-game="steam" data-category="AGSTM">
+          <div class="game-banner" style="background:linear-gradient(135deg,#0f172a,#1e293b)">
+            <img src="images/steam.svg" alt="Steam Wallet" class="logo-invert"/>
+            <span class="game-badge"><i data-lucide="ticket"></i> Voucher</span>
           </div>
           <div class="game-info">
-            <h3 class="game-name">Super Sus</h3>
-            <span class="game-sub">Golden Star</span>
+            <h3 class="game-name">Steam Wallet</h3>
+            <span class="game-sub">Voucher Steam</span>
           </div>
         </div>
-        <!-- Metal Slug: Awakening -->
-        <div class="game-card" data-game="metalslug" data-category="AGMSA">
-          <div class="game-banner" style="background:linear-gradient(135deg,#d32f2f,#212121)">
-            <img src="images/metalslug.svg?v=3" alt="Metal Slug"/>
-            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
+        <div class="game-card" data-game="garena" data-category="AGGS">
+          <div class="game-banner" style="background:linear-gradient(135deg,#e53935,#e35d5b)">
+            <img src="images/garena.png" alt="Garena Shells" class="logo-invert"/>
+            <span class="game-badge"><i data-lucide="ticket"></i> Voucher</span>
           </div>
           <div class="game-info">
-            <h3 class="game-name">Metal Slug</h3>
-            <span class="game-sub">Ruby MSA</span>
-          </div>
-        </div>
-        <!-- Harry Potter: Magic Awakened -->
-        <div class="game-card" data-game="harrypotter" data-category="AGHP">
-          <div class="game-banner" style="background:linear-gradient(135deg,#311b92,#bf360c)">
-            <img src="images/harrypotter.svg?v=3" alt="Harry Potter"/>
-            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
-          </div>
-          <div class="game-info">
-            <h3 class="game-name">Harry Potter</h3>
-            <span class="game-sub">Jewel</span>
-          </div>
-        </div>
-        <!-- Ragnarok -->
-        <div class="game-card" data-game="ragnarok" data-category="AGRO">
-          <div class="game-banner" style="background:linear-gradient(135deg,#1565c0,#f9a825)">
-            <img src="images/ragnarok.svg?v=3" alt="Ragnarok Online"/>
-            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
-          </div>
-          <div class="game-info">
-            <h3 class="game-name">Ragnarok Online</h3>
-            <span class="game-sub">Voucher ROO</span>
-          </div>
-        </div>
-        <!-- Never After -->
-        <div class="game-card" data-game="neverafter" data-category="AGNA">
-          <div class="game-banner" style="background:linear-gradient(135deg,#7b1fa2,#ec407a)">
-            <img src="images/neverafter.svg?v=3" alt="Never After"/>
-            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
-          </div>
-          <div class="game-info">
-            <h3 class="game-name">Never After</h3>
-            <span class="game-sub">Diamond</span>
-          </div>
-        </div>
-        <!-- Revelation -->
-        <div class="game-card" data-game="revelation" data-category="AGRV">
-          <div class="game-banner" style="background:linear-gradient(135deg,#00695c,#004d40)">
-            <img src="images/revelation.svg?v=3" alt="Revelation"/>
-            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
-          </div>
-          <div class="game-info">
-            <h3 class="game-name">Revelation</h3>
-            <span class="game-sub">Jade</span>
-          </div>
-        </div>
-        <!-- Be The King -->
-        <div class="game-card" data-game="betheking" data-category="AGBTK">
-          <div class="game-banner" style="background:linear-gradient(135deg,#bf360c,#ffc107)">
-            <img src="images/betheking.svg?v=3" alt="Be The King"/>
-            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
-          </div>
-          <div class="game-info">
-            <h3 class="game-name">Be The King</h3>
-            <span class="game-sub">Gold</span>
-          </div>
-        </div>
-        <!-- Ace Racer -->
-        <div class="game-card" data-game="aceracer" data-category="AGAR">
-          <div class="game-banner" style="background:linear-gradient(135deg,#0d47a1,#ff6d00)">
-            <img src="images/aceracer.svg?v=3" alt="Ace Racer"/>
-            <span class="game-badge"><i data-lucide="zap"></i> Instan</span>
-          </div>
-          <div class="game-info">
-            <h3 class="game-name">Ace Racer</h3>
-            <span class="game-sub">Coin</span>
+            <h3 class="game-name">Garena Shells</h3>
+            <span class="game-sub">Voucher Shells</span>
           </div>
         </div>
       </div>
@@ -351,22 +238,13 @@
     <div class="container">
       <div class="sec-hd">
         <span class="sec-tag">⚡ Formulir Order</span>
-        <h2 class="sec-title">Isi Data <span class="gold" id="form-game-title">Mobile Legends</span> Kamu</h2>
+        <h2 class="sec-title">Isi Data <span class="primary-text" id="form-game-title">Mobile Legends</span> Kamu</h2>
       </div>
 
       <div class="topup-box">
-        <!-- STEP INDICATOR -->
-        <div class="steps" id="steps">
-          <div class="stp active" id="stp1"><div class="stp-n">1</div><span>ID Player</span></div>
-          <div class="stp-line"></div>
-          <div class="stp" id="stp2"><div class="stp-n">2</div><span>Pilih Paket</span></div>
-          <div class="stp-line"></div>
-          <div class="stp" id="stp3"><div class="stp-n">3</div><span>Konfirmasi</span></div>
-        </div>
-
         <!-- STEP 1 — Verifikasi ID -->
-        <div class="step-panel active" id="panel1">
-          <h3 class="step-h">Verifikasi ID Player</h3>
+        <div class="step-panel active" id="panel-combined">
+          <h3 class="step-h">1. Data Akun</h3>
           <p class="step-d">Masukkan User ID dan Server untuk menampilkan nickname akun kamu secara real-time</p>
 
           <!-- Member widget (only shown when logged in) -->
@@ -434,14 +312,8 @@
             </ol>
           </div>
 
-          <div class="step-nav">
-            <button class="btn btn-gold" id="btn-s1-next" disabled>Pilih Paket →</button>
-          </div>
-        </div>
-
-        <!-- STEP 2 — Pilih Paket -->
-        <div class="step-panel" id="panel2">
-          <h3 class="step-h">Pilih Paket Diamond</h3>
+          
+          <hr style="border:0;border-top:1px solid var(--bdr);margin:30px 0;"><h3 class="step-h">2. Pilih Nominal</h3>
           <p class="step-d">Harga langsung dari Apigames.id — selalu update real-time</p>
 
           <div class="pkg-loading hidden" id="pkg-loading">
@@ -480,7 +352,7 @@
 
           <!-- Pilihan Metode Pembayaran -->
           <div class="fg" style="margin-top:20px">
-            <label>Pilih Metode Pembayaran <span class="req">*</span></label>
+            <hr style="border:0;border-top:1px solid var(--bdr);margin:30px 0;margin-bottom:20px"><h3 class="step-h" style="margin-bottom:15px">3. Pilih Metode Pembayaran</h3><label style="display:none">Pilih Metode Pembayaran <span class="req">*</span></label>
             <div class="payment-methods-grid">
               <div class="payment-method-card active" data-method="bank_transfer">
                 <div class="pm-card-header">
@@ -499,14 +371,13 @@
             </div>
           </div>
 
-          <div class="step-nav">
-            <button class="btn btn-ghost" id="btn-s2-back">← Kembali</button>
-            <button class="btn btn-gold" id="btn-s2-next" disabled>Pesan Sekarang →</button>
-          </div>
+          <div class="step-nav" style="margin-top:30px"><button class="btn btn-gold w100" id="btn-submit-order" style="font-size:1.1rem;padding:15px">Beli Sekarang</button></div>
         </div>
 
-        <!-- STEP 3 — Instruksi Bayar -->
-        <div class="step-panel" id="panel3">
+        </div>
+
+<!-- INVOICE PANEL -->
+<div class="step-panel" id="panel-invoice">
           <div class="order-success" id="order-success">
             <div class="os-icon">📋</div>
             <h3>Order Berhasil Dibuat!</h3>
@@ -572,7 +443,7 @@
     <div class="container">
       <div class="sec-hd">
         <span class="sec-tag"><i data-lucide="book-open" class="icon-inline"></i> Panduan Pembelian</span>
-        <h2 class="sec-title">Cara <span class="gold">Pembelian</span></h2>
+        <h2 class="sec-title">Cara <span class="primary-text">Pembelian</span></h2>
       </div>
       <div class="cara-grid">
         <div class="cara-card"><div class="cara-num">01</div><div class="cara-icon"><i data-lucide="gamepad-2"></i></div><h3>Pilih Game</h3><p>Pilih game favoritmu dari katalog marketplace kami yang lengkap.</p></div>
@@ -593,7 +464,7 @@
     <div class="container">
       <div class="sec-hd">
         <span class="sec-tag"><i data-lucide="help-circle" class="icon-inline"></i> FAQ & Bantuan</span>
-        <h2 class="sec-title">Pertanyaan <span class="gold">Populer</span></h2>
+        <h2 class="sec-title">Pertanyaan <span class="primary-text">Populer</span></h2>
       </div>
       <div class="faq-list">
         <div class="faq-item">
@@ -626,7 +497,7 @@
       <div class="footer-inner">
         <div class="footer-brand">
           <i data-lucide="gem" class="logo-gem-icon"></i>
-          <span class="footer-logo-text">Dabrong<span class="gold"> Store</span></span>
+          <span class="footer-logo-text">Dabrong<span class="primary-text"> Store</span></span>
         </div>
         <p class="footer-desc">Layanan top-up game online tercepat dan terlengkap dengan pembayaran instan 24 jam. Kami menghadirkan kemudahan transaksi untuk semua gamer di Indonesia.</p>
         <div class="footer-links">

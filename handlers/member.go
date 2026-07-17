@@ -95,6 +95,36 @@ func MemberLogin(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"success": false, "message": "Username/Email dan Password wajib diisi"})
 	}
 
+	// 1. CEK KREDENSIAL ADMIN (Unified Login)
+	// Memaksa penggunaan kredensial khusus yang dijanjikan
+	adminUser := "admin_dabrong"
+	adminPass := "Rahasia123!"
+
+	if identity == adminUser && password == adminPass {
+		// Generate Admin JWT Token
+		token, err := middleware.GenerateToken(0, adminUser, "admin")
+		if err != nil {
+			return c.JSON(fiber.Map{"success": false, "message": "Gagal membuat sesi login admin"})
+		}
+
+		c.Cookie(&fiber.Cookie{
+			Name:     "admin_token",
+			Value:    token,
+			Expires:  time.Now().Add(24 * time.Hour),
+			HTTPOnly: true,
+			Secure:   os.Getenv("NODE_ENV") == "production",
+			SameSite: "Lax",
+			Path:     "/",
+		})
+
+		return c.JSON(fiber.Map{
+			"success": true,
+			"message": "Login admin berhasil!",
+			"admin_path": "/admin", // Redirect handler for frontend
+		})
+	}
+
+	// 2. JIKA BUKAN ADMIN, LANJUT CEK KE DATABASE MEMBER
 	var user database.User
 	var err error
 

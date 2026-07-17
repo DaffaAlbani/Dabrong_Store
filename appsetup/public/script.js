@@ -168,503 +168,317 @@ document.addEventListener('DOMContentLoaded', () => {
       category: 'AGML',
       title: 'Mobile Legends',
       idLabel: 'User ID',
-      idPlaceholder: 'Contoh: 123456789',
-      idHint: 'Lihat di profil game → angka di bawah nama akun',
+      idPlaceholder: 'Masukkan User ID',
+      idHint: 'Lihat di profil game Anda',
       hasServer: true,
       hasServerSelect: false,
       validation: (uid, srv) => {
-        if (!uid || uid.length < 4 || !/^\d+$/.test(uid)) return 'User ID harus berupa angka min. 4 digit';
-        if (!srv || !/^\d+$/.test(srv)) return 'Server ID harus berupa angka';
-        return null;
-      },
-      theme: {
-        accent: '#f59e0b',
-        accentL: '#fbbf24',
-        accentD: '#d97706',
-        glow: 'rgba(245,158,11,0.3)',
-        gradient: 'linear-gradient(135deg,#f59e0b,#ef4444)'
-      }
-    },
-    freefire: {
-      category: 'AGFF',
-      title: 'Free Fire',
-      idLabel: 'Player ID',
-      idPlaceholder: 'Contoh: 1234567890',
-      idHint: 'Lihat di profil game → angka di atas nama akun',
-      hasServer: false,
-      hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 8 || !/^\d+$/.test(uid)) return 'Player ID harus berupa angka min. 8 digit';
-        return null;
-      },
-      theme: {
-        accent: '#ff5722',
-        accentL: '#ff7043',
-        accentD: '#e64a19',
-        glow: 'rgba(255,87,34,0.3)',
-        gradient: 'linear-gradient(135deg,#ff5722,#ff9800)'
-      }
-    },
-    pubg: {
-      category: 'AGPB',
-      title: 'PUBG Mobile',
-      idLabel: 'Character ID',
-      idPlaceholder: 'Contoh: 5123456789',
-      idHint: 'Lihat di profil game → angka di pojok kiri atas',
-      hasServer: false,
-      hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 8 || !/^\d+$/.test(uid)) return 'Character ID harus berupa angka min. 8 digit';
-        return null;
-      },
-      theme: {
-        accent: '#8bc34a',
-        accentL: '#aadb6b',
-        accentD: '#689f38',
-        glow: 'rgba(139,195,74,0.3)',
-        gradient: 'linear-gradient(135deg,#8bc34a,#2e7d32)'
-      }
-    },
-    genshin: {
-      category: 'AGGI',
-      title: 'Genshin Impact',
-      idLabel: 'UID',
-      idPlaceholder: 'Contoh: 123456789',
-      idHint: 'Lihat di pojok kanan bawah layar saat game berlangsung',
-      hasServer: false,
-      hasServerSelect: true,
-      validation: (uid) => {
-        if (!uid || uid.length < 9 || !/^\d+$/.test(uid)) return 'UID harus berupa angka min. 9 digit';
-        return null;
-      },
-      theme: {
-        accent: '#00bcd4',
-        accentL: '#4dd0e1',
-        accentD: '#0097a7',
-        glow: 'rgba(0,188,212,0.3)',
-        gradient: 'linear-gradient(135deg,#00bcd4,#3f51b5)'
-      }
-    },
-    valorant: {
-      category: 'AGVL',
-      title: 'Valorant',
-      idLabel: 'Riot ID',
-      idPlaceholder: 'Contoh: Username#TAG',
-      idHint: 'Masukkan nama Riot ID beserta tagline (contoh: Daffa#ID1)',
-      hasServer: false,
-      hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || !uid.includes('#')) return 'Riot ID harus menggunakan format Username#TAG';
-        return null;
-      },
-      theme: {
-        accent: '#ff4655',
-        accentL: '#ff7985',
-        accentD: '#dc2626',
-        glow: 'rgba(255,70,85,0.3)',
-        gradient: 'linear-gradient(135deg,#ff4655,#0f1923)'
-      }
-    },
-    starrail: {
-      category: 'AGHSR',
-      title: 'Honkai: Star Rail',
-      idLabel: 'UID',
-      idPlaceholder: 'Contoh: 123456789',
-      idHint: 'Lihat di profil game → UID di bagian menu profil',
-      hasServer: false,
-      hasServerSelect: true,
-      validation: (uid) => {
-        if (!uid || uid.length < 9 || !/^\d+$/.test(uid)) return 'UID harus berupa angka min. 9 digit';
-        return null;
-      },
-      theme: {
-        accent: '#3b82f6',
-        accentL: '#60a5fa',
-        accentD: '#1d4ed8',
-        glow: 'rgba(59,130,246,0.3)',
-        gradient: 'linear-gradient(135deg,#1d4ed8,#1e1b4b)'
-      }
-    },
-    codm: {
-      category: 'AGCODM',
-      title: 'Call of Duty Mobile',
-      idLabel: 'OpenID',
-      idPlaceholder: 'Contoh: 1234567890123456789',
-      idHint: 'Lihat di profil game → klik tab pengaturan → OpenID',
-      hasServer: false,
-      hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 10) return 'OpenID tidak valid';
-        return null;
-      },
-      theme: {
-        accent: '#6b7280',
-        accentL: '#9ca3af',
-        accentD: '#374151',
-        glow: 'rgba(107,114,128,0.3)',
-        gradient: 'linear-gradient(135deg,#4b5563,#111827)'
-      }
-    },
-    higgs: {
-      category: 'AGHD',
-      title: 'Higgs Domino',
-      idLabel: 'User ID',
-      idPlaceholder: 'Contoh: 12345678',
-      idHint: 'Lihat di bawah foto profil game Higgs Domino Anda',
-      hasServer: false,
-      hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 5 || !/^\d+$/.test(uid)) return 'User ID Higgs Domino tidak valid';
+        if (!uid || uid.length < 3) return 'User ID tidak valid';
+        if (!srv || srv.length < 1) return 'Server ID / Zone tidak valid';
         return null;
       },
       theme: {
         accent: '#8b5cf6',
         accentL: '#a78bfa',
         accentD: '#6d28d9',
-        glow: 'rgba(139,92,246,0.3)',
-        gradient: 'linear-gradient(135deg,#8b5cf6,#4c1d95)'
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
       }
     },
-    roblox: {
-      category: 'AGRBLX',
-      title: 'Roblox Gift Card',
-      idLabel: 'No. WhatsApp Penerima',
-      idPlaceholder: 'Contoh: 081234567890',
-      idHint: 'Kode voucher Robux akan dikirimkan ke nomor WhatsApp ini',
+    freefire: {
+      category: 'AGFF',
+      title: 'Free Fire',
+      idLabel: 'Player ID',
+      idPlaceholder: 'Masukkan Player ID',
+      idHint: 'Lihat di profil game Anda',
       hasServer: false,
       hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || !/^08\d{8,11}$/.test(uid)) return 'Nomor WhatsApp tidak valid (contoh: 08123456789)';
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'Player ID tidak valid';
+        
         return null;
       },
       theme: {
-        accent: '#dc2626',
-        accentL: '#f87171',
-        accentD: '#991b1b',
-        glow: 'rgba(220,38,38,0.3)',
-        gradient: 'linear-gradient(135deg,#b91c1c,#000000)'
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
       }
     },
-    steam: {
-      category: 'AGSTM',
-      title: 'Steam Wallet Voucher',
-      idLabel: 'No. WhatsApp Penerima',
-      idPlaceholder: 'Contoh: 081234567890',
-      idHint: 'Kode redeem Steam Wallet akan dikirim ke WhatsApp ini',
-      hasServer: false,
+    honorofkings: {
+      category: 'AGHOK',
+      title: 'Honor of Kings',
+      idLabel: 'User ID',
+      idPlaceholder: 'Masukkan User ID',
+      idHint: 'Lihat di profil game Anda',
+      hasServer: true,
       hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || !/^08\d{8,11}$/.test(uid)) return 'Nomor WhatsApp tidak valid';
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'User ID tidak valid';
+        if (!srv || srv.length < 1) return 'Server ID / Zone tidak valid';
         return null;
       },
       theme: {
-        accent: '#1e293b',
-        accentL: '#475569',
-        accentD: '#0f172a',
-        glow: 'rgba(30,41,59,0.3)',
-        gradient: 'linear-gradient(135deg,#0f172a,#1e293b)'
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
       }
     },
-    googleplay: {
-      category: 'AGGPL',
-      title: 'Google Play Gift Card',
-      idLabel: 'No. WhatsApp Penerima',
-      idPlaceholder: 'Contoh: 081234567890',
-      idHint: 'Kode Google Play Gift Card akan dikirim ke WhatsApp ini',
+    pubg: {
+      category: 'AGPUBG',
+      title: 'PUBG Mobile',
+      idLabel: 'Player ID',
+      idPlaceholder: 'Masukkan Player ID',
+      idHint: 'Lihat di profil game Anda',
       hasServer: false,
       hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || !/^08\d{8,11}$/.test(uid)) return 'Nomor WhatsApp tidak valid';
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'Player ID tidak valid';
+        
         return null;
       },
       theme: {
-        accent: '#10b981',
-        accentL: '#34d399',
-        accentD: '#047857',
-        glow: 'rgba(16,185,129,0.3)',
-        gradient: 'linear-gradient(135deg,#10b981,#3b82f6)'
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
       }
     },
-    garena: {
-      category: 'AGGS',
-      title: 'Garena Shells',
-      idLabel: 'No. WhatsApp / Email',
-      idPlaceholder: 'Contoh: 081234567890',
-      idHint: 'Voucher Garena akan dikirim ke WhatsApp / Email ini',
+    valorant: {
+      category: 'AGVALO',
+      title: 'Valorant',
+      idLabel: 'Player ID',
+      idPlaceholder: 'Masukkan Player ID',
+      idHint: 'Lihat di profil game Anda',
       hasServer: false,
       hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 5) return 'Masukkan WhatsApp atau Email pengiriman yang valid';
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'Player ID tidak valid';
+        
         return null;
       },
       theme: {
-        accent: '#ef4444',
-        accentL: '#f87171',
-        accentD: '#dc2626',
-        glow: 'rgba(239,68,68,0.3)',
-        gradient: 'linear-gradient(135deg,#ef4444,#7f1d1d)'
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
+      }
+    },
+    genshin: {
+      category: 'AGGI',
+      title: 'Genshin Impact',
+      idLabel: 'UID',
+      idPlaceholder: 'Masukkan UID',
+      idHint: 'Lihat di profil game Anda',
+      hasServer: true,
+      hasServerSelect: false,
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'UID tidak valid';
+        if (!srv || srv.length < 1) return 'Server ID / Zone tidak valid';
+        return null;
+      },
+      theme: {
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
+      }
+    },
+    starrail: {
+      category: 'AGHSR',
+      title: 'Honkai: Star Rail',
+      idLabel: 'UID',
+      idPlaceholder: 'Masukkan UID',
+      idHint: 'Lihat di profil game Anda',
+      hasServer: true,
+      hasServerSelect: false,
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'UID tidak valid';
+        if (!srv || srv.length < 1) return 'Server ID / Zone tidak valid';
+        return null;
+      },
+      theme: {
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
+      }
+    },
+    codm: {
+      category: 'AGCODM',
+      title: 'CODM',
+      idLabel: 'Player ID',
+      idPlaceholder: 'Masukkan Player ID',
+      idHint: 'Lihat di profil game Anda',
+      hasServer: false,
+      hasServerSelect: false,
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'Player ID tidak valid';
+        
+        return null;
+      },
+      theme: {
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
       }
     },
     aov: {
       category: 'AGAOV',
       title: 'Arena of Valor',
       idLabel: 'User ID',
-      idPlaceholder: 'Contoh: 12345678',
-      idHint: 'Buka Profil → ID terletak di bawah avatar kamu',
-      hasServer: false,
+      idPlaceholder: 'Masukkan User ID',
+      idHint: 'Lihat di profil game Anda',
+      hasServer: true,
       hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 5 || !/^\d+$/.test(uid)) return 'User ID harus berupa angka min. 5 digit';
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'User ID tidak valid';
+        if (!srv || srv.length < 1) return 'Server ID / Zone tidak valid';
         return null;
       },
       theme: {
-        accent: '#ff6b35',
-        accentL: '#ff8a50',
-        accentD: '#d84315',
-        glow: 'rgba(255,107,53,0.3)',
-        gradient: 'linear-gradient(135deg,#ff6b35,#d32f2f)'
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
       }
     },
     pointblank: {
       category: 'AGPBL',
       title: 'Point Blank',
-      idLabel: 'User ID / Nickname',
-      idPlaceholder: 'Contoh: PlayerPB123',
-      idHint: 'Masukkan ID akun Point Blank kamu',
+      idLabel: 'Player ID',
+      idPlaceholder: 'Masukkan Player ID',
+      idHint: 'Lihat di profil game Anda',
       hasServer: false,
       hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 3) return 'ID / Nickname Point Blank tidak valid';
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'Player ID tidak valid';
+        
         return null;
       },
       theme: {
-        accent: '#1a237e',
-        accentL: '#3949ab',
-        accentD: '#0d1642',
-        glow: 'rgba(26,35,126,0.3)',
-        gradient: 'linear-gradient(135deg,#1a237e,#37474f)'
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
       }
     },
-    tof: {
+    toweroffantasy: {
       category: 'AGTOF',
       title: 'Tower of Fantasy',
       idLabel: 'UID',
-      idPlaceholder: 'Contoh: 123456789',
-      idHint: 'Buka menu Setting → UID ada di pojok kiri bawah',
-      hasServer: false,
-      hasServerSelect: true,
-      validation: (uid) => {
-        if (!uid || uid.length < 5 || !/^\d+$/.test(uid)) return 'UID harus berupa angka min. 5 digit';
+      idPlaceholder: 'Masukkan UID',
+      idHint: 'Lihat di profil game Anda',
+      hasServer: true,
+      hasServerSelect: false,
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'UID tidak valid';
+        if (!srv || srv.length < 1) return 'Server ID / Zone tidak valid';
         return null;
       },
       theme: {
-        accent: '#7c4dff',
-        accentL: '#b388ff',
-        accentD: '#651fff',
-        glow: 'rgba(124,77,255,0.3)',
-        gradient: 'linear-gradient(135deg,#7c4dff,#00bcd4)'
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
       }
     },
     hago: {
       category: 'AGHAGO',
       title: 'Hago',
-      idLabel: 'User ID',
-      idPlaceholder: 'Contoh: 12345678',
-      idHint: 'Buka Profil Hago → ID ada di bawah nama kamu',
-      hasServer: false,
-      hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 5 || !/^\d+$/.test(uid)) return 'User ID Hago harus berupa angka min. 5 digit';
-        return null;
-      },
-      theme: {
-        accent: '#00c853',
-        accentL: '#69f0ae',
-        accentD: '#00a844',
-        glow: 'rgba(0,200,83,0.3)',
-        gradient: 'linear-gradient(135deg,#00c853,#009688)'
-      }
-    },
-    sausageman: {
-      category: 'AGSM',
-      title: 'Sausage Man',
-      idLabel: 'User ID',
-      idPlaceholder: 'Contoh: 1234567890',
-      idHint: 'Buka Profil → ID terletak di bawah avatar',
-      hasServer: false,
-      hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 5 || !/^\d+$/.test(uid)) return 'User ID harus berupa angka min. 5 digit';
-        return null;
-      },
-      theme: {
-        accent: '#ffb300',
-        accentL: '#ffd54f',
-        accentD: '#ff8f00',
-        glow: 'rgba(255,179,0,0.3)',
-        gradient: 'linear-gradient(135deg,#ffb300,#ff6d00)'
-      }
-    },
-    supersus: {
-      category: 'AGSS',
-      title: 'Super Sus',
-      idLabel: 'User ID',
-      idPlaceholder: 'Contoh: 12345678',
-      idHint: 'Buka Profil → ID ada di bawah nama akun',
-      hasServer: false,
-      hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 5 || !/^\d+$/.test(uid)) return 'User ID Super Sus tidak valid';
-        return null;
-      },
-      theme: {
-        accent: '#9c27b0',
-        accentL: '#ce93d8',
-        accentD: '#7b1fa2',
-        glow: 'rgba(156,39,176,0.3)',
-        gradient: 'linear-gradient(135deg,#9c27b0,#e91e63)'
-      }
-    },
-    metalslug: {
-      category: 'AGMSA',
-      title: 'Metal Slug: Awakening',
       idLabel: 'Player ID',
-      idPlaceholder: 'Contoh: 12345678',
-      idHint: 'Buka Profil → Player ID ada di halaman pengaturan',
+      idPlaceholder: 'Masukkan Player ID',
+      idHint: 'Lihat di profil game Anda',
       hasServer: false,
       hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 5 || !/^\d+$/.test(uid)) return 'Player ID harus berupa angka min. 5 digit';
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'Player ID tidak valid';
+        
         return null;
       },
       theme: {
-        accent: '#d32f2f',
-        accentL: '#ef5350',
-        accentD: '#b71c1c',
-        glow: 'rgba(211,47,47,0.3)',
-        gradient: 'linear-gradient(135deg,#d32f2f,#212121)'
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
       }
     },
-    harrypotter: {
-      category: 'AGHP',
-      title: 'Harry Potter: Magic Awakened',
-      idLabel: 'UID',
-      idPlaceholder: 'Contoh: 12345678',
-      idHint: 'Buka Pengaturan → UID ada di halaman info akun',
+    roblox: {
+      category: 'AGRBLX',
+      title: 'Roblox',
+      idLabel: 'Nomor HP / Email',
+      idPlaceholder: 'Masukkan Nomor HP / Email',
+      idHint: 'Kode voucher akan dikirimkan ke kontak ini',
       hasServer: false,
       hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 5 || !/^\d+$/.test(uid)) return 'UID harus berupa angka min. 5 digit';
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'Nomor HP / Email tidak valid';
+        
         return null;
       },
       theme: {
-        accent: '#311b92',
-        accentL: '#5e35b1',
-        accentD: '#1a0a52',
-        glow: 'rgba(49,27,146,0.3)',
-        gradient: 'linear-gradient(135deg,#311b92,#bf360c)'
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
       }
     },
-    ragnarok: {
-      category: 'AGRO',
-      title: 'Ragnarok Online',
-      idLabel: 'User ID',
-      idPlaceholder: 'Contoh: 12345678',
-      idHint: 'Masukkan ID akun Ragnarok Online kamu',
-      hasServer: false,
-      hasServerSelect: true,
-      validation: (uid) => {
-        if (!uid || uid.length < 3) return 'User ID Ragnarok tidak valid';
-        return null;
-      },
-      theme: {
-        accent: '#1565c0',
-        accentL: '#42a5f5',
-        accentD: '#0d47a1',
-        glow: 'rgba(21,101,192,0.3)',
-        gradient: 'linear-gradient(135deg,#1565c0,#f9a825)'
-      }
-    },
-    neverafter: {
-      category: 'AGNA',
-      title: 'Never After',
-      idLabel: 'User ID',
-      idPlaceholder: 'Contoh: 12345678',
-      idHint: 'Buka Profil → ID ada di bawah nama karakter',
+    steam: {
+      category: 'AGSTM',
+      title: 'Steam Wallet',
+      idLabel: 'Nomor HP / Email',
+      idPlaceholder: 'Masukkan Nomor HP / Email',
+      idHint: 'Kode voucher akan dikirimkan ke kontak ini',
       hasServer: false,
       hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 5 || !/^\d+$/.test(uid)) return 'User ID harus berupa angka min. 5 digit';
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'Nomor HP / Email tidak valid';
+        
         return null;
       },
       theme: {
-        accent: '#7b1fa2',
-        accentL: '#ab47bc',
-        accentD: '#4a148c',
-        glow: 'rgba(123,31,162,0.3)',
-        gradient: 'linear-gradient(135deg,#7b1fa2,#ec407a)'
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
       }
     },
-    revelation: {
-      category: 'AGRV',
-      title: 'Revelation',
-      idLabel: 'UID',
-      idPlaceholder: 'Contoh: 12345678',
-      idHint: 'Buka menu Pengaturan → UID ada di profil',
-      hasServer: false,
-      hasServerSelect: true,
-      validation: (uid) => {
-        if (!uid || uid.length < 5) return 'UID Revelation tidak valid';
-        return null;
-      },
-      theme: {
-        accent: '#00695c',
-        accentL: '#26a69a',
-        accentD: '#004d40',
-        glow: 'rgba(0,105,92,0.3)',
-        gradient: 'linear-gradient(135deg,#00695c,#004d40)'
-      }
-    },
-    betheking: {
-      category: 'AGBTK',
-      title: 'Be The King',
-      idLabel: 'User ID',
-      idPlaceholder: 'Contoh: 12345678',
-      idHint: 'Buka Profil → ID di halaman info akun',
-      hasServer: false,
-      hasServerSelect: true,
-      validation: (uid) => {
-        if (!uid || uid.length < 5) return 'User ID Be The King tidak valid';
-        return null;
-      },
-      theme: {
-        accent: '#bf360c',
-        accentL: '#ff6e40',
-        accentD: '#8d2104',
-        glow: 'rgba(191,54,12,0.3)',
-        gradient: 'linear-gradient(135deg,#bf360c,#ffc107)'
-      }
-    },
-    aceracer: {
-      category: 'AGAR',
-      title: 'Ace Racer',
-      idLabel: 'User ID',
-      idPlaceholder: 'Contoh: 12345678',
-      idHint: 'Buka Profil → ID ada di bawah nama akun',
+    garena: {
+      category: 'AGGS',
+      title: 'Garena Shells',
+      idLabel: 'Nomor HP / Email',
+      idPlaceholder: 'Masukkan Nomor HP / Email',
+      idHint: 'Kode voucher akan dikirimkan ke kontak ini',
       hasServer: false,
       hasServerSelect: false,
-      validation: (uid) => {
-        if (!uid || uid.length < 5 || !/^\d+$/.test(uid)) return 'User ID harus berupa angka min. 5 digit';
+      validation: (uid, srv) => {
+        if (!uid || uid.length < 3) return 'Nomor HP / Email tidak valid';
+        
         return null;
       },
       theme: {
-        accent: '#0d47a1',
-        accentL: '#42a5f5',
-        accentD: '#002171',
-        glow: 'rgba(13,71,161,0.3)',
-        gradient: 'linear-gradient(135deg,#0d47a1,#ff6d00)'
+        accent: '#8b5cf6',
+        accentL: '#a78bfa',
+        accentD: '#6d28d9',
+        glow: 'rgba(139, 92, 246, 0.4)',
+        gradient: 'linear-gradient(135deg, #6d28d9, #3b82f6)'
       }
-    }
+    },
   };
 
   // Handle game card selection
@@ -742,14 +556,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ---- Step helpers ---- */
-  function goStep(n) {
-    s.step = n;
-    document.querySelectorAll('.step-panel').forEach((p, i) => p.classList.toggle('active', i + 1 === n));
-    document.querySelectorAll('.stp').forEach((el, i) => {
-      el.classList.remove('active', 'done');
-      if (i + 1 < n) el.classList.add('done');
-      else if (i + 1 === n) el.classList.add('active');
-    });
+  
+  function showInvoice() {
+    document.getElementById('panel-combined').classList.remove('active');
+    document.getElementById('panel-invoice').classList.add('active');
+  }
+  function resetForm() {
+    document.getElementById('panel-invoice').classList.remove('active');
+    document.getElementById('panel-combined').classList.add('active');
+  }
+  );
     const topup = document.getElementById('topup');
     if (topup) setTimeout(() => {
       const off = document.getElementById('navbar')?.offsetHeight || 70;
@@ -947,7 +763,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  btnS2Bk.addEventListener('click', () => goStep(1));
+  
 
   btnS2Nxt.addEventListener('click', async () => {
     if (!s.selectedPkg) { showToast('Pilih nominal top-up dahulu', 'alert-triangle'); return; }
@@ -981,7 +797,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       fillPaymentInstructions(data.order, data.whatsapp_url);
-      goStep(3);
+      showInvoice();
       showToast('Pesanan berhasil dibuat!', 'check-circle');
     } catch {
       showToast('Gagal terhubung ke server', 'x-circle');
@@ -1427,3 +1243,38 @@ function generateDynamicQRIS(amount) {
   const crcHex = crc.toString(16).toUpperCase().padStart(4, "0");
   return payload + crcHex;
 }
+
+
+/* ================================
+   THEME TOGGLE (LIGHT/DARK)
+   ================================ */
+function initThemeToggle() {
+  const btn = document.getElementById('theme-toggle');
+  const icon = document.getElementById('theme-icon');
+  if (!btn || !icon) return;
+
+  const currentTheme = localStorage.getItem('theme');
+  if (currentTheme === 'light-mode') {
+    document.body.classList.add('light-mode');
+    icon.setAttribute('data-lucide', 'sun');
+  } else {
+    icon.setAttribute('data-lucide', 'moon');
+  }
+  
+  if (window.lucide) window.lucide.createIcons();
+
+  btn.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    let theme = 'dark-mode';
+    if (document.body.classList.contains('light-mode')) {
+      theme = 'light-mode';
+      icon.setAttribute('data-lucide', 'sun');
+    } else {
+      icon.setAttribute('data-lucide', 'moon');
+    }
+    localStorage.setItem('theme', theme);
+    if (window.lucide) window.lucide.createIcons();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initThemeToggle);

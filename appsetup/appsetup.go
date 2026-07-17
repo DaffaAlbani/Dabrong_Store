@@ -76,6 +76,19 @@ func Setup() *fiber.App {
 	//  STATIC ASSETS SERVING (Pemisahan Customer & Admin)
 	// ============================================================
 
+	var publicRoot http.FileSystem
+	var adminRoot http.FileSystem
+
+	if os.Getenv("NODE_ENV") == "development" {
+		publicRoot = http.Dir("appsetup/public")
+		adminRoot = http.Dir("appsetup/admin-views")
+		log.Println("[INFO] Mode Development: Menyajikan file statis langsung dari disk (Live Reload)")
+	} else {
+		publicRoot = http.FS(publicFS)
+		adminRoot = http.FS(adminFS)
+		log.Println("[INFO] Mode Produksi: Menyajikan file statis dari go:embed")
+	}
+
 	// 2. Admin Frontend (Hidden & Secret Path)
 	adminSecretPath := os.Getenv("ADMIN_SECRET_PATH")
 	if adminSecretPath == "" {
@@ -86,7 +99,7 @@ func Setup() *fiber.App {
 	
 	// Serve static files admin pada path rahasia
 	app.Use("/"+adminSecretPath, filesystem.New(filesystem.Config{
-		Root:   http.FS(adminFS),
+		Root:   adminRoot,
 		Browse: false,
 		Index:  "index.html",
 	}))
@@ -98,6 +111,9 @@ func Setup() *fiber.App {
 
 	// Route status tanpa ekstensi .html
 	app.Get("/status", func(c *fiber.Ctx) error {
+		if os.Getenv("NODE_ENV") == "development" {
+			return c.SendFile("appsetup/public/status.html")
+		}
 		fileContent, err := fs.ReadFile(publicFS, "status.html")
 		if err != nil {
 			return c.Status(fiber.StatusNotFound).SendString("404 Page Not Found")
@@ -168,7 +184,7 @@ func Setup() *fiber.App {
 
 	// 1. Customer Frontend (Public) - registered last as wildcard fallback
 	app.Use("/", filesystem.New(filesystem.Config{
-		Root:   http.FS(publicFS),
+		Root:   publicRoot,
 		Browse: false,
 		Index:  "index.html",
 	}))

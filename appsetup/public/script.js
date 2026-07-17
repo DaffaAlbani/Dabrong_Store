@@ -133,9 +133,24 @@ const FALLBACK_PACKAGES = [
   { product_id:'AGML5532', product_name:'5532 Diamond',  price:1249900,diamond:5532, bonus:'+40%', cat:'whale' },
 ];
 
+function extractDiamondGlobal(name = '') {
+  const m = name.match(/(\d[\d,\.]*)/);
+  return m ? parseInt(m[1].replace(/[,\.]/g, '')) : 0;
+}
+
 function categorize(pkg) {
-  const diamond = pkg.diamond !== undefined ? pkg.diamond : extractDiamond(pkg.product_name);
-  if (!diamond || diamond === 0) {
+  const diamond = pkg.diamond !== undefined ? pkg.diamond : extractDiamondGlobal(pkg.product_name || '');
+  
+  const nameLower = (pkg.product_name || '').toLowerCase();
+  const isSub = !diamond || diamond === 0 || 
+                nameLower.includes('pass') || 
+                nameLower.includes('weekly') || 
+                nameLower.includes('monthly') || 
+                nameLower.includes('starlight') || 
+                nameLower.includes('membership') || 
+                nameLower.includes('premium');
+                
+  if (isSub) {
     return 'subscription';
   }
   const p = pkg.price || 0;
@@ -546,6 +561,28 @@ document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.style.setProperty('--gold-gw', config.theme.glow);
     document.documentElement.style.setProperty('--grad-g', config.theme.gradient);
 
+    // 4. Update Game Header (Left Column)
+    const ghTitle = document.getElementById('gh-title');
+    if (ghTitle) ghTitle.textContent = config.title;
+    
+    const activeCard = document.querySelector('.game-card.active');
+    if (activeCard) {
+      const cardBanner = activeCard.querySelector('.game-banner');
+      const cardLogo = activeCard.querySelector('img');
+      const cardSub = activeCard.querySelector('.game-sub');
+      
+      const ghBanner = document.getElementById('gh-banner');
+      const ghLogo = document.getElementById('gh-logo');
+      const ghDesc = document.getElementById('gh-desc');
+      
+      if (cardBanner && ghBanner) ghBanner.style.background = cardBanner.style.background;
+      if (cardLogo && ghLogo) {
+        ghLogo.src = cardLogo.src;
+        ghLogo.className = cardLogo.className;
+      }
+      if (cardSub && ghDesc) ghDesc.textContent = cardSub.textContent;
+    }
+
     // Refresh saved accounts for this game if member is logged in
     if (memberUser) {
       loadSavedAccounts(memberUser.username);
@@ -684,7 +721,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.success && data.products?.length > 0) {
         s.packages = data.products.map(p => ({
           ...p,
-          diamond: extractDiamond(p.product_name),
+          diamond: extractDiamondGlobal(p.product_name),
           cat: categorize(p),
         }));
       } else {
@@ -705,14 +742,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function extractDiamond(name = '') {
+  function extractDiamondGlobal(name = '') {
     const m = name.match(/(\d[\d,\.]*)/);
     return m ? parseInt(m[1].replace(/[,\.]/g, '')) : 0;
   }
 
   function updateFilterButtons() {
     const catsPresent = new Set(s.packages.map(p => p.cat));
-    document.querySelectorAll('.pf').forEach(btn => {
+    document.querySelectorAll('.pfp').forEach(btn => {
       const filter = btn.dataset.cat;
       if (filter === 'all') return;
       if (catsPresent.has(filter)) {
@@ -822,9 +859,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  document.querySelectorAll('.pf').forEach(btn => {
+  document.querySelectorAll('.pfp').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.pf').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.pfp').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       s.pkgFilter = btn.dataset.cat;
       renderPkgs();

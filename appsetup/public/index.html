@@ -234,183 +234,207 @@
   </section>
 
   <!-- TOP-UP FORM -->
+  
   <section class="section topup-section" id="topup" style="padding-top:20px">
     <div class="container">
-      <div class="sec-hd">
-        <span class="sec-tag">⚡ Formulir Order</span>
-        <h2 class="sec-title">Isi Data <span class="primary-text" id="form-game-title">Mobile Legends</span> Kamu</h2>
-      </div>
-
-      <div class="topup-box">
-        <!-- STEP 1 — Verifikasi ID -->
-        <div class="step-panel active" id="panel-combined">
-          <h3 class="step-h"><span class="step-num">1</span> Data Akun</h3>
-          <p class="step-d">Masukkan User ID dan Server untuk menampilkan nickname akun kamu secara real-time</p>
-
-          <!-- Member widget (only shown when logged in) -->
-          <div id="member-widget" class="member-widget hidden">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <span style="font-weight:600;color:var(--gold)">👋 Halo, <span id="widget-username">Member</span></span>
-              <span style="background:var(--gold);color:#000;font-weight:700;padding:2px 6px;border-radius:4px;font-size:0.75rem">SALDO: <span id="widget-saldo">Rp 0</span></span>
+      <div class="unipin-layout">
+        <!-- LEFT COLUMN: GAME INFO -->
+        <div class="unipin-left">
+          <div class="game-header-card">
+            <div class="game-header-banner" id="gh-banner">
+              <img src="images/mlbb.png" alt="Game Logo" id="gh-logo"/>
             </div>
-            <div id="saved-accounts-section" style="border-top:1px dashed rgba(212,175,55,0.2);padding-top:8px">
-              <label style="font-size:0.8rem;color:var(--muted);display:block;margin-bottom:5px">Pilih Akun Tersimpan:</label>
-              <div id="saved-accounts-list" style="display:flex;gap:8px;flex-wrap:wrap">
-                <!-- Dinamis oleh JS -->
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="fg" id="fg-uid">
-              <label id="lbl-uid">User ID <span class="req">*</span></label>
-              <input type="text" id="inp-uid" placeholder="Contoh: 123456789" maxlength="30"/>
-              <span class="hint" id="hint-uid">Lihat di profil game → angka di bawah nama akun</span>
-            </div>
-            <div class="fg" id="fg-srv">
-              <label id="lbl-srv">Server ID <span class="req">*</span></label>
-              <input type="text" id="inp-srv" placeholder="Contoh: 1234" maxlength="10" inputmode="numeric"/>
-              <span class="hint" id="hint-srv">Angka dalam tanda kurung di samping User ID</span>
-            </div>
-            <div class="fg hidden" id="fg-srv-select">
-              <label>Pilih Server <span class="req">*</span></label>
-              <select id="inp-srv-select" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--bdr);color:var(--text);padding:12px;border-radius:var(--r-md);font-family:var(--fbody);outline:none;cursor:pointer">
-                <option value="os_asia" style="background:#111;color:#fff">Asia</option>
-                <option value="os_usa" style="background:#111;color:#fff">America</option>
-                <option value="os_euro" style="background:#111;color:#fff">Europe</option>
-                <option value="os_cht" style="background:#111;color:#fff">TW/HK/MO</option>
-              </select>
-            </div>
-          </div>
-
-          <button class="btn btn-gold w100" id="btn-verify">
-            <span id="verify-txt">🔍 Verifikasi ID Player</span>
-          </button>
-
-          <!-- Result card -->
-          <div class="verified-card hidden" id="verified-card">
-            <div class="vc-avatar">🧙</div>
-            <div class="vc-info">
-              <strong id="vc-name">—</strong>
-              <span id="vc-id">ID: — | Server: —</span>
-              <span class="badge-ok">✅ Akun Ditemukan</span>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:8px">
-              <button class="vc-change" id="vc-change">Ganti ID</button>
-              <button class="vc-change hidden" id="vc-save-acc" style="border-color:var(--gold);color:var(--gold)">💾 Simpan Akun</button>
-            </div>
-          </div>
-
-          <!-- How to find ID -->
-          <div class="howid">
-            <button class="howid-btn" id="howid-btn">❓ Cara menemukan User ID</button>
-            <ol class="howid-list hidden" id="howid-list">
-              <li>Buka game Mobile Legends Bang Bang</li>
-              <li>Tap foto profil di pojok kiri atas</li>
-              <li>User ID terlihat di bawah nama akun (angka)</li>
-              <li>Server ada di dalam tanda kurung di samping User ID</li>
-            </ol>
-          </div>
-
-          
-          <hr style="border:0;border-top:1px solid var(--bdr);margin:30px 0;"><h3 class="step-h">2. Pilih Nominal</h3>
-          <p class="step-d">Harga langsung dari Apigames.id — selalu update real-time</p>
-
-          <div class="pkg-loading hidden" id="pkg-loading">
-            <div class="spinner"></div>
-            <span>Memuat paket dari Apigames...</span>
-          </div>
-
-          <div class="pkg-filter" id="pkg-filter">
-            <button class="pf active" data-cat="all">Semua</button>
-            <button class="pf" data-cat="starter">Starter</button>
-            <button class="pf" data-cat="mid">Mid</button>
-            <button class="pf" data-cat="pro">Pro</button>
-            <button class="pf" data-cat="whale">Whale 🐳</button>
-            <button class="pf" data-cat="subscription">Subscription 🎫</button>
-          </div>
-
-          <div class="pkg-grid" id="pkg-grid">
-            <!-- Diisi oleh JS dari API -->
-          </div>
-
-          <div class="pkg-error hidden" id="pkg-error">
-            <p>⚠️ Gagal memuat produk. Menggunakan harga statis.</p>
-          </div>
-
-          <!-- Paket terpilih summary -->
-          <div class="sel-pkg hidden" id="sel-pkg">
-            <span id="sel-pkg-info">—</span>
-            <span class="sel-pkg-price" id="sel-pkg-price">—</span>
-          </div>
-
-          <!-- Pilihan Metode Pembayaran -->
-          <div class="fg" style="margin-top:20px">
-            <hr style="border:0;border-top:1px solid var(--bdr);margin:30px 0;margin-bottom:20px">
-            <h3 class="step-h" style="margin-bottom:15px"><span class="step-num">3</span> Pilih Metode Pembayaran</h3>
-            <div class="payment-methods-grid">
-              <div class="payment-method-card active" data-method="bank_transfer">
-                <div class="pm-card-header">
-                  <span class="pm-title">🏦 Transfer Bank BCA</span>
-                  <span class="pm-badge">Manual</span>
-                </div>
-                <span class="pm-desc">Transfer manual ke rekening BCA Admin</span>
-              </div>
-              <div class="payment-method-card" data-method="qris">
-                <div class="pm-card-header">
-                  <span class="pm-title">🛡️ QRIS (E-Wallet & Bank)</span>
-                  <span class="pm-badge">Instan</span>
-                </div>
-                <span class="pm-desc">Scan QRIS menggunakan Gopay, Dana, OVO, ShopeePay, dll.</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- STEP 4: Checkout -->
-          <div class="fg" style="margin-top:20px">
-            <hr style="border:0;border-top:1px solid var(--bdr);margin:30px 0;margin-bottom:20px">
-            <h3 class="step-h" style="margin-bottom:15px"><span class="step-num">4</span> Checkout</h3>
-            
-            <div class="checkout-summary-box" style="background:rgba(0,0,0,0.15); border:1px solid var(--bdr2); border-radius:var(--r-md); padding:20px; margin-bottom:20px; display:flex; flex-direction:column; gap:12px;">
-              <!-- Package Selected details -->
-              <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.95rem;">
-                <span style="color:var(--muted)">Item</span>
-                <span id="summary-item" style="color:var(--white); font-weight:600">—</span>
-              </div>
+            <div class="game-header-info">
+              <h2 class="gh-title" id="gh-title">Mobile Legends</h2>
+              <p class="gh-desc" id="gh-desc">Diamond MLBB Instan</p>
               
-              <!-- Payment Method details -->
-              <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.95rem;">
-                <span style="color:var(--muted)">Pembayaran</span>
-                <span id="summary-payment" style="color:var(--white); font-weight:600">—</span>
-              </div>
-
-              <!-- Input WhatsApp -->
-              <div class="fg" id="fg-wa" style="margin-top:10px; margin-bottom:0;">
-                <label style="font-size:0.88rem; color:var(--muted); margin-bottom:6px; display:block;">No. WhatsApp Kamu <span class="req">*</span></label>
-                <input type="tel" id="inp-wa" placeholder="08xxxxxxxxxx" maxlength="15" inputmode="numeric" style="padding:10px 14px; font-size:0.95rem; width:100%; box-sizing:border-box;"/>
-                <span class="hint" style="font-size:0.75rem; margin-top:4px; display:block;">Untuk konfirmasi order via WhatsApp Admin</span>
+              <div class="gh-guide">
+                <button class="gh-guide-btn" id="howid-btn">❓ Cara menemukan User ID</button>
+                <ol class="gh-guide-list hidden" id="howid-list">
+                  <li>Buka game Mobile Legends Bang Bang</li>
+                  <li>Tap foto profil di pojok kiri atas</li>
+                  <li>User ID terlihat di bawah nama akun (angka)</li>
+                  <li>Server ada di dalam tanda kurung di samping User ID</li>
+                </ol>
               </div>
             </div>
-
-            <!-- Total Price Row -->
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding:0 8px;">
-              <span style="font-weight:600; font-size:1rem; color:var(--muted);">Total</span>
-              <span style="font-family:var(--fgame); font-weight:800; font-size:1.4rem; color:var(--white);" id="checkout-total-price">Rp 0</span>
-            </div>
-
-            <!-- Hidden legacy elements to preserve JS references safely -->
-            <div class="sel-pkg hidden" id="sel-pkg" style="display:none !important;">
-              <span id="sel-pkg-info">—</span>
-              <span class="sel-pkg-price" id="sel-pkg-price">—</span>
-            </div>
-
-            <button class="btn btn-gold w100" id="btn-submit-order" style="font-size:1.1rem; padding:15px; font-weight:700;">Beli Sekarang</button>
           </div>
         </div>
 
-        </div>
+        <!-- RIGHT COLUMN: TOPUP FORM -->
+        <div class="unipin-right" id="panel-combined">
+          
+          <!-- CARD 1: ID -->
+          <div class="unipin-card">
+            <div class="uc-header">
+              <span class="uc-num">1</span>
+              <h3>Masukkan Data Akun</h3>
+            </div>
+            <div class="uc-body">
+              <!-- Member widget (only shown when logged in) -->
+              <div id="member-widget" class="member-widget hidden">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-weight:600;color:var(--gold)">👋 Halo, <span id="widget-username">Member</span></span>
+                  <span style="background:var(--gold);color:#000;font-weight:700;padding:2px 6px;border-radius:4px;font-size:0.75rem">SALDO: <span id="widget-saldo">Rp 0</span></span>
+                </div>
+                <div id="saved-accounts-section" style="border-top:1px dashed rgba(212,175,55,0.2);padding-top:8px">
+                  <label style="font-size:0.8rem;color:var(--muted);display:block;margin-bottom:5px">Pilih Akun Tersimpan:</label>
+                  <div id="saved-accounts-list" style="display:flex;gap:8px;flex-wrap:wrap">
+                    <!-- Dinamis oleh JS -->
+                  </div>
+                </div>
+              </div>
 
-<!-- INVOICE PANEL -->
+              <div class="form-row">
+                <div class="fg" id="fg-uid">
+                  <label id="lbl-uid">User ID <span class="req">*</span></label>
+                  <input type="text" id="inp-uid" placeholder="Contoh: 123456789" maxlength="30"/>
+                  <span class="hint" id="hint-uid">Lihat di profil game → angka di bawah nama akun</span>
+                </div>
+                <div class="fg" id="fg-srv">
+                  <label id="lbl-srv">Server ID <span class="req">*</span></label>
+                  <input type="text" id="inp-srv" placeholder="Contoh: 1234" maxlength="10" inputmode="numeric"/>
+                  <span class="hint" id="hint-srv">Angka dalam tanda kurung di samping User ID</span>
+                </div>
+                <div class="fg hidden" id="fg-srv-select">
+                  <label>Pilih Server <span class="req">*</span></label>
+                  <select id="inp-srv-select" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--bdr);color:var(--text);padding:12px;border-radius:var(--r-md);font-family:var(--fbody);outline:none;cursor:pointer">
+                    <option value="os_asia" style="background:#111;color:#fff">Asia</option>
+                    <option value="os_usa" style="background:#111;color:#fff">America</option>
+                    <option value="os_euro" style="background:#111;color:#fff">Europe</option>
+                    <option value="os_cht" style="background:#111;color:#fff">TW/HK/MO</option>
+                  </select>
+                </div>
+              </div>
+
+              <button class="btn btn-gold w100" id="btn-verify" style="margin-top:10px;">
+                <span id="verify-txt">🔍 Verifikasi ID Player</span>
+              </button>
+
+              <!-- Result card -->
+              <div class="verified-card hidden" id="verified-card">
+                <div class="vc-avatar">🧙</div>
+                <div class="vc-info">
+                  <strong id="vc-name">—</strong>
+                  <span id="vc-id">ID: — | Server: —</span>
+                  <span class="badge-ok">✅ Akun Ditemukan</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <button class="vc-change" id="vc-change">Ganti ID</button>
+                  <button class="vc-change hidden" id="vc-save-acc" style="border-color:var(--gold);color:var(--gold)">💾 Simpan Akun</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 2: NOMINAL -->
+          <div class="unipin-card">
+            <div class="uc-header">
+              <span class="uc-num">2</span>
+              <h3>Pilih Nominal</h3>
+            </div>
+            <div class="uc-body">
+              <div class="pkg-loading hidden" id="pkg-loading">
+                <div class="spinner"></div>
+                <span>Memuat paket dari Apigames...</span>
+              </div>
+
+              <div class="pkg-filter-pill" id="pkg-filter">
+                <button class="pfp active" data-cat="all">Semua</button>
+                <button class="pfp" data-cat="starter">Starter</button>
+                <button class="pfp" data-cat="mid">Mid</button>
+                <button class="pfp" data-cat="pro">Pro</button>
+                <button class="pfp" data-cat="whale">Whale 🐳</button>
+                <button class="pfp" data-cat="subscription">Subscription 🎫</button>
+              </div>
+
+              <div class="pkg-grid" id="pkg-grid">
+                <!-- Diisi oleh JS dari API -->
+              </div>
+
+              <div class="pkg-error hidden" id="pkg-error">
+                <p>⚠️ Gagal memuat produk. Menggunakan harga statis.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 3: PEMBAYARAN -->
+          <div class="unipin-card">
+            <div class="uc-header">
+              <span class="uc-num">3</span>
+              <h3>Pilih Metode Pembayaran</h3>
+            </div>
+            <div class="uc-body">
+              <div class="payment-methods-grid">
+                <div class="payment-method-card active" data-method="bank_transfer">
+                  <div class="pm-card-header">
+                    <span class="pm-title">🏦 Transfer Bank BCA</span>
+                    <span class="pm-badge">Manual</span>
+                  </div>
+                  <span class="pm-desc">Transfer manual ke rekening BCA Admin</span>
+                </div>
+                <div class="payment-method-card" data-method="qris">
+                  <div class="pm-card-header">
+                    <span class="pm-title">🛡️ QRIS (E-Wallet & Bank)</span>
+                    <span class="pm-badge">Instan</span>
+                  </div>
+                  <span class="pm-desc">Scan QRIS menggunakan Gopay, Dana, OVO, ShopeePay, dll.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 4: CHECKOUT -->
+          <div class="unipin-card">
+            <div class="uc-header">
+              <span class="uc-num">4</span>
+              <h3>Checkout</h3>
+            </div>
+            <div class="uc-body">
+              <div class="checkout-summary-box">
+                <!-- Package Selected details -->
+                <div class="csb-row">
+                  <span class="csb-label">Item</span>
+                  <span id="summary-item" class="csb-val">—</span>
+                </div>
+                
+                <!-- Payment Method details -->
+                <div class="csb-row">
+                  <span class="csb-label">Pembayaran</span>
+                  <span id="summary-payment" class="csb-val">—</span>
+                </div>
+
+                <!-- Input WhatsApp -->
+                <div class="fg" id="fg-wa" style="margin-top:15px; margin-bottom:0;">
+                  <label>No. WhatsApp Kamu <span class="req">*</span></label>
+                  <input type="tel" id="inp-wa" placeholder="08xxxxxxxxxx" maxlength="15" inputmode="numeric"/>
+                  <span class="hint">Untuk konfirmasi order via WhatsApp Admin</span>
+                </div>
+              </div>
+
+              <!-- Total Price Row -->
+              <div class="checkout-total-row">
+                <span class="ct-label">Total</span>
+                <span class="ct-val" id="checkout-total-price">Rp 0</span>
+              </div>
+
+              <!-- Hidden legacy elements to preserve JS references safely -->
+              <div class="sel-pkg hidden" id="sel-pkg" style="display:none !important;">
+                <span id="sel-pkg-info">—</span>
+                <span class="sel-pkg-price" id="sel-pkg-price">—</span>
+              </div>
+
+              <button class="btn btn-gold w100" id="btn-submit-order" style="font-size:1.1rem; padding:15px; font-weight:700;">Beli Sekarang</button>
+            </div>
+          </div>
+
+        </div> <!-- /.unipin-right -->
+      </div> <!-- /.unipin-layout -->
+    </div> <!-- /.container -->
+  </section>
+
+  <!-- INVOICE PANEL -->
+
 <div class="step-panel" id="panel-invoice">
           <div class="order-success" id="order-success">
             <div class="os-icon">📋</div>

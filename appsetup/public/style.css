@@ -398,3 +398,190 @@ body.light-mode .nav-links {
   background: rgba(248, 250, 252, 0.98) !important;
   border-left: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
+
+/* UNIPIN LAYOUT CSS */
+.unipin-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+@media (min-width: 900px) {
+  .unipin-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .unipin-left {
+    flex: 0 0 350px;
+    position: sticky;
+    top: 90px;
+  }
+  .unipin-right {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* Left Column: Game Header */
+.game-header-card {
+  background: var(--surface);
+  border: 1px solid var(--bdr);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: 0 8px 30px var(--shadow);
+}
+.game-header-banner {
+  width: 100%;
+  height: 160px;
+  background: linear-gradient(135deg, #1e3c72, #2a5298); /* Default MLBB color, will be updated via JS */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.game-header-banner img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+  z-index: 2;
+}
+.game-header-info {
+  padding: 24px;
+}
+.gh-title {
+  font-family: var(--fgame);
+  font-size: 1.4rem;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.gh-desc {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+.gh-guide {
+  background: rgba(255,255,255,0.03);
+  border-radius: var(--r-sm);
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.gh-guide-btn {
+  background: none;
+  border: none;
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+}
+.gh-guide-list {
+  margin-top: 12px;
+  padding-left: 20px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Right Column: Cards */
+.unipin-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.unipin-card {
+  background: var(--surface);
+  border: 1px solid var(--bdr);
+  border-radius: var(--r-md);
+  box-shadow: 0 4px 20px var(--shadow);
+  overflow: hidden;
+}
+.uc-header {
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--bdr);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.uc-num {
+  background: var(--gold);
+  color: #000;
+  font-weight: 800;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.9rem;
+}
+.uc-header h3 {
+  font-family: var(--fgame);
+  font-size: 1.2rem;
+  color: var(--white);
+  margin: 0;
+}
+.uc-body {
+  padding: 20px;
+}
+
+/* Category Pills */
+.pkg-filter-pill {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.pfp {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--bdr2);
+  color: var(--muted);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--ease);
+}
+.pfp:hover {
+  background: rgba(255,255,255,0.1);
+  color: var(--white);
+}
+.pfp.active {
+  background: var(--gold);
+  color: #000;
+  border-color: var(--gold);
+}
+
+/* Checkout Summary Details */
+.csb-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+.csb-label { color: var(--muted); }
+.csb-val { color: var(--white); font-weight: 600; text-align: right; }
+.checkout-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(212,175,55,0.1);
+  border-radius: var(--r-sm);
+  border: 1px dashed var(--gold);
+}
+.ct-label { font-weight: 600; font-size: 1rem; color: var(--gold); }
+.ct-val { font-family: var(--fgame); font-weight: 800; font-size: 1.4rem; color: var(--gold); }
+
+/* Fix missing step-panel styles since we replaced it with unipin-card */
+.unipin-card .form-row { display: flex; flex-direction: column; gap: 15px; }
+@media(min-width: 600px) {
+  .unipin-card .form-row { flex-direction: row; }
+}

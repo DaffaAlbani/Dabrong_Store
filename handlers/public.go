@@ -299,9 +299,40 @@ func CreateOrder(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"success": false, "message": "Format jumlah diamond tidak valid"})
 	}
 
-	// Generate order number (DML + 10 digit timestamp/random)
+	// Determine game name and order prefix based on productID
+	gameName := "Game"
+	prefix := "DBR"
+	prodIDUpper := strings.ToUpper(productID)
+	switch {
+	case strings.HasPrefix(prodIDUpper, "AGML"):
+		gameName = "Mobile Legends"
+		prefix = "DML"
+	case strings.HasPrefix(prodIDUpper, "AGFF"):
+		gameName = "Free Fire"
+		prefix = "DFF"
+	case strings.HasPrefix(prodIDUpper, "AGHOK"):
+		gameName = "Honor of Kings"
+		prefix = "DHK"
+	case strings.HasPrefix(prodIDUpper, "AGPUBG"):
+		gameName = "PUBG Mobile"
+		prefix = "DPB"
+	case strings.HasPrefix(prodIDUpper, "AGVALO"):
+		gameName = "Valorant"
+		prefix = "DVL"
+	case strings.HasPrefix(prodIDUpper, "AGGI"):
+		gameName = "Genshin Impact"
+		prefix = "DGI"
+	case strings.HasPrefix(prodIDUpper, "AGHSR"):
+		gameName = "Honkai Star Rail"
+		prefix = "DSR"
+	case strings.HasPrefix(prodIDUpper, "AGCODM"):
+		gameName = "CODM"
+		prefix = "DCM"
+	}
+
+	// Generate order number with random suffix to prevent UNIQUE constraint collisions
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	orderNo := fmt.Sprintf("DML%d", time.Now().Unix()%10000000000)
+	orderNo := fmt.Sprintf("%s%d%03d", prefix, time.Now().Unix()%100000000, r.Intn(1000))
 	uniqueCode := r.Intn(900) + 100 // 100 - 999
 	totalBayar := priceVal + uniqueCode
 
@@ -375,14 +406,14 @@ func CreateOrder(c *fiber.Ctx) error {
 	}
 
 	waMsg := fmt.Sprintf(
-		"Halo Admin, saya sudah transfer untuk order top-up ML:\n\n"+
+		"Halo Admin, saya sudah transfer untuk order top-up %s:\n\n"+
 			"📋 No. Order: %s\n"+
 			"👤 Player: %s (ID: %s | Server: %s)\n"+
 			"💎 Paket: %s\n"+
 			"💰 Total Transfer: Rp %s\n"+
 			"🏦 Ke: %s %s a/n %s\n\n"+
 			"Mohon segera dikonfirmasi. Terima kasih!",
-		orderNo, pName, playerID, serverID, prodName,
+		gameName, orderNo, pName, playerID, serverID, prodName,
 		formatRupiah(totalBayar), bankName, bankAccount, bankHolder,
 	)
 

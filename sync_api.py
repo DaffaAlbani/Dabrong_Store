@@ -192,7 +192,7 @@ with open(output_path, 'w', encoding='utf-8') as f:
     json.dump(final_products, f, indent=2, ensure_ascii=False)
 
 # Save to SQLite
-db_path = "orders.db"
+db_path = "appsetup/orders.db"
 if os.getenv("VERCEL") or os.getenv("NOW_REGION"):
     db_path = "/tmp/orders.db"
 

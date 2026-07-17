@@ -29,11 +29,10 @@ var embedDB []byte
 
 func Setup() *fiber.App {
 	// Force Vercel Go compiler to rebuild and embed the updated orders.db
-	_ = "db_version_1"
+	_ = "db_version_2"
 	// Load environment variables dari .env
 	_ = godotenv.Load() // Ignore error on production/Vercel where .env file is missing
 
-	// Get subdirectory FS for public
 	publicFS, err := fs.Sub(embedPublic, "public")
 	if err != nil {
 		log.Fatalf("[FATAL] Gagal inisialisasi public embed FS: %v\n", err)
@@ -46,7 +45,7 @@ func Setup() *fiber.App {
 	}
 
 	// Detect if running on Vercel or AWS Lambda
-	dbPath := "./orders.db"
+	dbPath := "./appsetup/orders.db"
 	if os.Getenv("VERCEL") != "" || os.Getenv("NOW_REGION") != "" || os.Getenv("LAMBDA_TASK_ROOT") != "" {
 		// Write the embedded DB to /tmp/orders.db so it's writable
 		err := os.WriteFile("/tmp/orders.db", embedDB, 0644)

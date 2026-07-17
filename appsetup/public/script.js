@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.lucide) window.lucide.createIcons();
 
   // Only run customer logic if on main page
-  if (!document.getElementById('panel1')) return;
+  if (!document.getElementById('panel-combined')) return;
 
   // State
   let s = {
@@ -496,6 +496,9 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Reset step 1
       resetStep1();
+      
+      // Load packages for selected game
+      loadPackages();
 
       // Smooth scroll to top-up form
       const topup = document.getElementById('topup');
@@ -744,6 +747,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.getElementById('inp-wa').addEventListener('input', checkStep2Next);
+  
+  // Load initial packages for default game (Mobile Legends) on page load
+  loadPackages();
 
   // Payment Method Selection
   document.querySelectorAll('.payment-method-card').forEach(card => {

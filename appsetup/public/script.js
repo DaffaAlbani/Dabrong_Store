@@ -710,14 +710,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const isSel = s.selectedPkg?.product_id === pkg.product_id;
       const badgeTxt = pkg.product_name?.toLowerCase().includes('1195') || pkg.product_name?.toLowerCase().includes('514') ? 'POPULAR' : '';
       const badgeCls = badgeTxt === 'HOT' ? 'hot' : badgeTxt === 'POPULAR' ? 'pop' : '';
+      
+      // If product has 0 diamonds (like passes, memberships, etc.), show the cleaned product name
+      const rawName = pkg.product_name || pkg.product_id;
+      const isPass = !pkg.diamond || pkg.diamond === 0;
+      const displayAmt = isPass ? rawName : pkg.diamond.toLocaleString('id-ID');
+      const gemIcon = isPass ? '🎫' : '💎';
+
       return `
         <div class="pkg-card ${isSel ? 'selected' : ''}"
              onclick="selectPkg('${pkg.product_id}')"
              id="pk-${pkg.product_id.replace(/[^a-z0-9]/gi,'')}"
              title="${pkg.product_name}">
           ${badgeTxt ? `<div class="pkg-badge ${badgeCls}">${badgeTxt}</div>` : ''}
-          <div class="pkg-gem">💎</div>
-          <div class="pkg-amt">${(pkg.diamond || 0).toLocaleString('id-ID')}</div>
+          <div class="pkg-gem">${gemIcon}</div>
+          <div class="pkg-amt ${isPass ? 'pass-text' : ''}">${displayAmt}</div>
           <div class="pkg-bonus">${pkg.bonus || '\u00a0'}</div>
           <div class="pkg-price">${fmt(pkg.price)}</div>
         </div>`;
@@ -730,7 +737,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPkgs();
     if (s.selectedPkg) {
       selPkg.classList.remove('hidden');
-      document.getElementById('sel-pkg-info').textContent = `💎 ${(s.selectedPkg.diamond||0).toLocaleString('id-ID')} Diamond${s.selectedPkg.bonus ? ' ' + s.selectedPkg.bonus : ''}`;
+      const isPass = !s.selectedPkg.diamond || s.selectedPkg.diamond === 0;
+      const displayInfo = isPass ? s.selectedPkg.product_name : `💎 ${(s.selectedPkg.diamond||0).toLocaleString('id-ID')} Diamond${s.selectedPkg.bonus ? ' ' + s.selectedPkg.bonus : ''}`;
+      document.getElementById('sel-pkg-info').textContent = displayInfo;
       document.getElementById('sel-pkg-price').textContent = fmt(s.selectedPkg.price);
       checkStep2Next();
     } else {

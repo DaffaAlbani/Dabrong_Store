@@ -226,6 +226,7 @@ ul { list-style: none; }
 .pkg-badge { position: absolute; top: 0; right: 0; font-size: 0.65rem; font-weight: 800; padding: 4px 12px; border-radius: 0 var(--r-lg) 0 var(--r-lg); background: var(--grad-p); color: var(--white); text-transform: uppercase; }
 .pkg-gem { font-size: 2.2rem; margin-bottom: 8px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
 .pkg-amt { font-family: var(--fgame); font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.pkg-amt.pass-text { font-size: 0.85rem; line-height: 1.25; word-break: break-word; padding-inline: 4px; font-family: var(--fbody); font-weight: 600; }
 .pkg-bonus { font-size: 0.75rem; color: #34d399; font-weight: 600; margin-bottom: 12px; min-height: 16px; }
 .pkg-price { font-family: var(--fhead); font-size: 1.15rem; font-weight: 800; color: var(--primary-l); }
 .pkg-orig { font-size: 0.75rem; color: var(--dim); text-decoration: line-through; display: block; margin-top: 4px; }

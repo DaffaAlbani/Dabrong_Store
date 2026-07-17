@@ -878,7 +878,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnS2Nxt.addEventListener('click', async () => {
     if (!s.selectedPkg) { showToast('Pilih nominal top-up dahulu', 'alert-triangle'); return; }
     const wa = document.getElementById('inp-wa').value.trim();
-    if (!wa || !/^0\d{9,12}$/.test(wa)) { showToast('Nomor WhatsApp tidak valid', 'alert-triangle'); return; }
+    if (!wa || !/^(08|628)\d{8,12}$/.test(wa)) { showToast('Nomor WhatsApp tidak valid (contoh: 08123456789 atau 628123456789)', 'alert-triangle'); return; }
 
     btnS2Nxt.disabled = true;
     btnS2Nxt.textContent = '⏳ Membuat order...';

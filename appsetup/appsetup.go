@@ -47,13 +47,13 @@ func Setup() *fiber.App {
 	// Detect if running on Vercel or AWS Lambda
 	dbPath := "./appsetup/orders.db"
 	if os.Getenv("VERCEL") != "" || os.Getenv("NOW_REGION") != "" || os.Getenv("LAMBDA_TASK_ROOT") != "" {
-		// Write the embedded DB to /tmp/orders.db so it's writable
-		err := os.WriteFile("/tmp/orders.db", embedDB, 0644)
+		// Write the embedded DB to /tmp/orders_v3.db so it's writable
+		err := os.WriteFile("/tmp/orders_v3.db", embedDB, 0644)
 		if err != nil {
-			log.Printf("[WARNING] Could not write to /tmp/orders.db: %v", err)
+			log.Printf("[WARNING] Could not write to /tmp/orders_v3.db: %v", err)
 		}
 		
-		dbPath = "/tmp/orders.db"
+		dbPath = "/tmp/orders_v3.db"
 		log.Println("[INFO] Serverless environment detected. Embedded DB written to: " + dbPath)
 	}
 

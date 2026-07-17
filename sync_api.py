@@ -194,7 +194,7 @@ with open(output_path, 'w', encoding='utf-8') as f:
 # Save to SQLite
 db_path = "appsetup/orders.db"
 if os.getenv("VERCEL") or os.getenv("NOW_REGION"):
-    db_path = "/tmp/orders.db"
+    db_path = "/tmp/orders_v3.db"
 
 conn = sqlite3.connect(db_path)
 cur = conn.cursor()

@@ -258,15 +258,36 @@ func GetProducts(c *fiber.Ctx) error {
 }
 
 type OrderRequest struct {
-	PlayerID      string `json:"player_id"`
-	ServerID      string `json:"server_id"`
-	PlayerName    string `json:"player_name"`
-	ProductID     string `json:"product_id"`
-	ProductName   string `json:"product_name"`
-	Diamond       string `json:"diamond"`
-	Price         string `json:"price"`
-	Whatsapp      string `json:"whatsapp"`
-	PaymentMethod string `json:"payment_method"`
+	PlayerID      string      `json:"player_id"`
+	ServerID      string      `json:"server_id"`
+	PlayerName    string      `json:"player_name"`
+	ProductID     string      `json:"product_id"`
+	ProductName   string      `json:"product_name"`
+	Diamond       interface{} `json:"diamond"`
+	Price         interface{} `json:"price"`
+	Whatsapp      string      `json:"whatsapp"`
+	PaymentMethod string      `json:"payment_method"`
+}
+
+func parseInterfaceToInt(val interface{}) (int, error) {
+	if val == nil {
+		return 0, nil
+	}
+	switch v := val.(type) {
+	case int:
+		return v, nil
+	case int64:
+		return int(v), nil
+	case float64:
+		return int(v), nil
+	case string:
+		if v == "" {
+			return 0, nil
+		}
+		return strconv.Atoi(v)
+	default:
+		return 0, fmt.Errorf("unsupported type: %T", val)
+	}
 }
 
 // POST /api/order
@@ -281,7 +302,7 @@ func CreateOrder(c *fiber.Ctx) error {
 	productID := strings.TrimSpace(req.ProductID)
 	whatsapp := strings.TrimSpace(req.Whatsapp)
 
-	if playerID == "" || productID == "" || req.Price == "" || req.Diamond == "" {
+	if playerID == "" || productID == "" {
 		return c.JSON(fiber.Map{"success": false, "message": "Data tidak lengkap"})
 	}
 
@@ -290,14 +311,11 @@ func CreateOrder(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"success": false, "message": "Nomor WhatsApp tidak valid (contoh: 08123456789)"})
 	}
 
-	priceVal, err := strconv.Atoi(req.Price)
-	if err != nil {
+	priceVal, err := parseInterfaceToInt(req.Price)
+	if err != nil || priceVal <= 0 {
 		return c.JSON(fiber.Map{"success": false, "message": "Format harga tidak valid"})
 	}
-	diamondVal, err := strconv.Atoi(req.Diamond)
-	if err != nil {
-		return c.JSON(fiber.Map{"success": false, "message": "Format jumlah diamond tidak valid"})
-	}
+	diamondVal, _ := parseInterfaceToInt(req.Diamond)
 
 	// Determine game name and order prefix based on productID
 	gameName := "Game"

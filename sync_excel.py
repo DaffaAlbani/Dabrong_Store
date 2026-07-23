@@ -194,6 +194,7 @@ for i, row in enumerate(rows[1:]): # Lewati baris header pertama
                 "category": cat,
                 "original_price": price_val,
                 "price": int(selling_price),
+                "status": "active"
             })
 
 # Pengelompokan denominasi untuk menyaring duplikat & mengambil harga termurah

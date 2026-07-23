@@ -154,7 +154,7 @@ for row in raw_products:
             "category": cat,
             "original_price": price_val,
             "price": int(selling_price),
-            "status": "active" if status_num == 1 else "inactive"
+            "status": "active"
         })
 
 final_products = []

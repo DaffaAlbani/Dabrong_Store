@@ -63,6 +63,11 @@ def extract_number(name):
     try: return int(num_str)
     except ValueError: return 0
 
+def is_subscription(name):
+    name_l = name.lower()
+    keywords = ["pass", "welkin", "starlight", "twilight", "card", "membership", "package", "pack", "supply", "level up", "coupon", "rookie", "gift card"]
+    return any(k in name_l for k in keywords)
+
 def clean_product_name(raw_name, cat, game_name):
     clean_name = raw_name
     clean_name = re.sub(game_name, '', clean_name, flags=re.IGNORECASE)
@@ -158,20 +163,19 @@ product_id_counter = 1
 for cat, items in parsed_by_cat.items():
     denom_groups = defaultdict(list)
     for item in items:
-        name_lower = item["product_name"].lower()
-        if "weekly" in name_lower and "diamond" in name_lower: key = "weekly_pass"
-        elif "twilight" in name_lower: key = "twilight_pass"
-        elif "express supply" in name_lower: key = "express_supply"
-        elif "welkin" in name_lower: key = "welkin_moon"
+        if is_subscription(item["product_name"]):
+            key = "sub_" + item["product_name"].lower().strip()
         else:
             extracted_num = extract_number(item["product_name"])
-            if extracted_num == 0: key = clean_product_name(item["product_name"], cat, categories_map[cat]).lower()
-            else: key = extracted_num
+            if extracted_num == 0:
+                key = "other_" + clean_product_name(item["product_name"], cat, categories_map[cat]).lower().strip()
+            else:
+                key = extracted_num
         denom_groups[key].append(item)
-        
-    unique_items = []
+
+    special_items = []
+    numeric_items = []
     for key, group in denom_groups.items():
-        # Prefer active product if available, else pick cheapest
         active_group = [x for x in group if x["status"] == "active"]
         if not active_group:
             cheapest = min(group, key=lambda x: x["original_price"])
@@ -179,37 +183,15 @@ for cat, items in parsed_by_cat.items():
             cheapest = min(active_group, key=lambda x: x["original_price"])
 
         cheapest["product_name"] = clean_product_name(cheapest["product_name"], cat, categories_map[cat])
-        unique_items.append(cheapest)
 
-    # Seleksi item untuk menghapus jumlah item yang hampir sama (ultra-clean)
-    special_items = []
-    numeric_items = []
-    seen_special = set()
-
-    for item in unique_items:
-        name_l = item["product_name"].lower()
-
-        # Abai paket kelipatan kartu (misal 2x, 3x, 4x, 5x weekly card)
-        if re.search(r"\b[2-9]x\b", name_l):
-            continue
-
-        if any(k in name_l for k in ["pass", "welkin", "starlight", "twilight", "card", "membership", "package", "pack", "supply", "level up"]):
-            base_key = re.sub(r"\b(global|mobile legend|mobile legends|pack|package|1x)\b", "", name_l).strip()
-            if "weekly" in name_l: base_key = "weekly pass"
-            elif "twilight" in name_l: base_key = "twilight pass"
-            elif "starlight" in name_l: base_key = "starlight"
-            elif "welkin" in name_l: base_key = "welkin"
-            elif "express supply" in name_l: base_key = "express supply"
-
-            if base_key not in seen_special:
-                seen_special.add(base_key)
-                special_items.append(item)
+        if is_subscription(cheapest["product_name"]):
+            special_items.append(cheapest)
         else:
-            num = extract_number(item["product_name"])
+            num = extract_number(cheapest["product_name"])
             if num == 0:
-                special_items.append(item)
+                special_items.append(cheapest)
             else:
-                numeric_items.append((num, item))
+                numeric_items.append((num, cheapest))
 
     numeric_items.sort(key=lambda x: (x[0], x[1]["price"]))
 

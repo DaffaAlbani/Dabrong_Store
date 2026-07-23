@@ -210,11 +210,11 @@ for cat, items in parsed_by_cat.items():
             filtered_numeric.append(item)
             prev_num = num
         else:
-            if num <= 50: min_diff, min_ratio = 10, 1.30
-            elif num <= 200: min_diff, min_ratio = 35, 1.30
-            elif num <= 1000: min_diff, min_ratio = 180, 1.30
-            elif num <= 5000: min_diff, min_ratio = 700, 1.30
-            else: min_diff, min_ratio = 1800, 1.25
+            if num <= 50: min_diff, min_ratio = 20, 1.50
+            elif num <= 300: min_diff, min_ratio = 80, 1.50
+            elif num <= 1000: min_diff, min_ratio = 300, 1.50
+            elif num <= 5000: min_diff, min_ratio = 1500, 1.40
+            else: min_diff, min_ratio = 3000, 1.30
 
             if (num - prev_num >= min_diff) and (num / prev_num >= min_ratio):
                 filtered_numeric.append(item)

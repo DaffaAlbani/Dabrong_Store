@@ -213,10 +213,10 @@
         const data = await res.json();
         
         if (data.success) {
-          if (data.admin_path) {
-            window.location.href = data.admin_path;
+          if (data.role === 'admin' || data.admin_path) {
+            window.location.href = data.admin_path || '/kelola-dabrong-99';
           } else {
-            window.location.href = "/dashboard";
+            window.location.href = "/dashboard.html";
           }
         } else {
           err.innerText = data.message || "Gagal login. Silakan periksa kembali data Anda.";

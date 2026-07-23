@@ -105,6 +105,9 @@ func GenerateToken(userID int64, username, role string) (string, error) {
 func AuthAdmin(c *fiber.Ctx) error {
 	tokenStr := c.Cookies("admin_token")
 	if tokenStr == "" {
+		tokenStr = c.Cookies("member_token")
+	}
+	if tokenStr == "" {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"success": false,
 			"message": "Unauthorized. Silakan login kembali.",

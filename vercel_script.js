@@ -1200,9 +1200,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const data = await res.json();
       if (data.success) {
-        showToast('Login Berhasil!', 'check-circle');
-        memberOverlay.classList.add('hidden');
-        checkMemberSession();
+        if (data.role === 'admin' || data.admin_path) {
+          showToast('Selamat datang Admin!', 'check-circle');
+          memberOverlay.classList.add('hidden');
+          setTimeout(() => {
+            window.location.href = data.admin_path || '/kelola-dabrong-99';
+          }, 800);
+        } else {
+          showToast('Login Berhasil!', 'check-circle');
+          memberOverlay.classList.add('hidden');
+          checkMemberSession();
+        }
       } else {
         errorEl.textContent = data.message || 'Login gagal';
       }

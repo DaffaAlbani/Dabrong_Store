@@ -95,14 +95,23 @@ func MemberLogin(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"success": false, "message": "Username/Email dan Password wajib diisi"})
 	}
 
-	// 1. CEK KREDENSIAL ADMIN (Unified Login)
-	// Memaksa penggunaan kredensial khusus yang dijanjikan
-	adminUser := "admin_dabrong"
-	adminPass := "Rahasia123!"
+	adminSecretPath := os.Getenv("ADMIN_SECRET_PATH")
+	if adminSecretPath == "" {
+		adminSecretPath = "kelola-dabrong-99"
+	}
 
-	if identity == adminUser && password == adminPass {
-		// Generate Admin JWT Token
-		token, err := middleware.GenerateToken(0, adminUser, "admin")
+	// 1. CEK KREDENSIAL ADMIN DARI ENV / DEFAULT
+	envAdminUser := os.Getenv("ADMIN_USERNAME")
+	envAdminPass := os.Getenv("ADMIN_PASSWORD")
+	if envAdminUser == "" {
+		envAdminUser = "admin_dabrong"
+	}
+	if envAdminPass == "" {
+		envAdminPass = "Rahasia123!"
+	}
+
+	if identity == envAdminUser && password == envAdminPass {
+		token, err := middleware.GenerateToken(0, envAdminUser, "admin")
 		if err != nil {
 			return c.JSON(fiber.Map{"success": false, "message": "Gagal membuat sesi login admin"})
 		}
@@ -117,18 +126,28 @@ func MemberLogin(c *fiber.Ctx) error {
 			Path:     "/",
 		})
 
+		c.Cookie(&fiber.Cookie{
+			Name:     "member_token",
+			Value:    token,
+			Expires:  time.Now().Add(24 * time.Hour),
+			HTTPOnly: true,
+			Secure:   os.Getenv("NODE_ENV") == "production",
+			SameSite: "Lax",
+			Path:     "/",
+		})
+
 		return c.JSON(fiber.Map{
-			"success": true,
-			"message": "Login admin berhasil!",
-			"admin_path": "/admin", // Redirect handler for frontend
+			"success":    true,
+			"message":    "Login admin berhasil!",
+			"role":       "admin",
+			"admin_path": "/" + adminSecretPath,
 		})
 	}
 
-	// 2. JIKA BUKAN ADMIN, LANJUT CEK KE DATABASE MEMBER
+	// 2. CEK KREDENSIAL KE DATABASE USERS
 	var user database.User
 	var err error
 
-	// Cek identity apakah email atau username
 	if strings.Contains(identity, "@") {
 		user, err = database.GetUserByEmail(strings.ToLower(identity))
 	} else {
@@ -139,19 +158,16 @@ func MemberLogin(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"success": false, "message": "Akun tidak ditemukan"})
 	}
 
-	// Bandingkan password
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		return c.JSON(fiber.Map{"success": false, "message": "Password salah"})
 	}
 
-	// Generate JWT Token
 	token, err := middleware.GenerateToken(user.ID, user.Username, user.Role)
 	if err != nil {
 		return c.JSON(fiber.Map{"success": false, "message": "Gagal membuat sesi login"})
 	}
 
-	// Simpan token di HTTP-Only cookie
 	c.Cookie(&fiber.Cookie{
 		Name:     "member_token",
 		Value:    token,
@@ -162,9 +178,36 @@ func MemberLogin(c *fiber.Ctx) error {
 		Path:     "/",
 	})
 
+	if user.Role == "admin" {
+		c.Cookie(&fiber.Cookie{
+			Name:     "admin_token",
+			Value:    token,
+			Expires:  time.Now().Add(24 * time.Hour),
+			HTTPOnly: true,
+			Secure:   os.Getenv("NODE_ENV") == "production",
+			SameSite: "Lax",
+			Path:     "/",
+		})
+
+		return c.JSON(fiber.Map{
+			"success":    true,
+			"message":    "Login admin berhasil!",
+			"role":       "admin",
+			"admin_path": "/" + adminSecretPath,
+			"user": fiber.Map{
+				"username": user.Username,
+				"email":    user.Email,
+				"whatsapp": user.Whatsapp,
+				"role":     user.Role,
+				"saldo":    user.Saldo,
+			},
+		})
+	}
+
 	return c.JSON(fiber.Map{
 		"success": true,
 		"message": "Login berhasil!",
+		"role":    "member",
 		"user": fiber.Map{
 			"username": user.Username,
 			"email":    user.Email,

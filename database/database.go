@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"time"
-
+"encoding/json"
 	_ "modernc.org/sqlite"
 )
 
@@ -76,6 +76,11 @@ func InitDB(dbPath string) error {
 	if err != nil {
 		return fmt.Errorf("gagal membuka database: %v", err)
 	}
+
+	// Optimize SQLite performance & concurrency
+	_, _ = DB.Exec("PRAGMA journal_mode=WAL;")
+	_, _ = DB.Exec("PRAGMA busy_timeout=5000;")
+	_, _ = DB.Exec("PRAGMA synchronous=NORMAL;")
 
 	// Buat tabel orders jika belum ada
 	_, err = DB.Exec(`
@@ -149,7 +154,18 @@ func InitDB(dbPath string) error {
 	_, _ = DB.Exec("ALTER TABLE orders ADD COLUMN user_id INTEGER")
 	_, _ = DB.Exec("ALTER TABLE products_cache ADD COLUMN original_price INTEGER DEFAULT 0")
 
-	log.Println("[DATABASE] SQLite berhasil terhubung & diinisialisasi.")
+	// Auto-seed products_cache dari embedded products.json jika kosong
+	var prodCount int
+	_ = DB.QueryRow("SELECT COUNT(*) FROM products_cache").Scan(&prodCount)
+	if prodCount == 0 && len(EmbeddedProducts) > 0 {
+		var embeddedList []Product
+		if err := json.Unmarshal(EmbeddedProducts, &embeddedList); err == nil && len(embeddedList) > 0 {
+			_ = CacheProducts(embeddedList)
+			log.Printf("[DATABASE] Auto-seeded %d products from embedded products.json\n", len(embeddedList))
+		}
+	}
+
+	log.Println("[DATABASE] SQLite berhasil terhubung & diinisialisasi dengan mode WAL.")
 	return nil
 }
 

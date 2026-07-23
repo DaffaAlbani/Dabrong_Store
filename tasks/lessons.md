@@ -13,3 +13,18 @@
 ## 3. Order ID Concurrency Collision
 - **Pattern:** Using pure seconds-based timestamps (`DML<timestamp_seconds>`) for order numbers has a high collision risk if two users purchase at the same second.
 - **Rule for Future:** Always append a random suffix (e.g. `rand.Intn(1000)`) or use millisecond-level precision to ensure uniqueness of transactional IDs.
+
+## 4. Hard-Disabled Submit Buttons Without Feedback
+- **Correction:** The user reported "saya gabisa klik bayar" (cannot click pay / buy button).
+- **Pattern:** `checkStep2Next()` set `btn.disabled = true` if input fields (e.g. WhatsApp or package selection) were incomplete or didn't match a strict regex (`/^0\d{9,12}$/`). Native HTML `disabled` attribute prevented any click events from firing, leaving the user with zero visual feedback or toast notifications explaining why they couldn't submit. Furthermore, strict regex rejected valid Indonesian phone numbers starting with `628` or `+628`.
+- **Rule for Future:** Avoid hard-disabling form submission buttons silently. Keep buttons interactive or provide explicit Toast / Tooltip feedback on click detailing missing fields (User ID, Server ID, Package, valid phone number format).
+
+## 5. No Unrequested International UI Sections on Local Web Store
+- **Correction:** The user requested "kok web nya ada international chekout?? gaperlu itu, aku cm mau yg indo aja, rubah sprti awal lg".
+- **Pattern:** Added a 3-tier international Paddle checkout section directly onto the public homepage of an Indonesian game top-up web store.
+- **Rule for Future:** Never inject unrequested global/international pricing sections or foreign checkout widgets onto the main consumer-facing store UI. Keep the user interface clean, focused, and tailored strictly to Indonesian payment methods (QRIS, Bank Transfer BCA, Account Saldo).
+
+## 6. Avoid Adding Unrequested Content Bars or Extra Sections
+- **Correction:** The user requested "Menampilkan 4 indikator kepercayaaan utama di bawah Hero Section... gaperlu ini".
+- **Pattern:** Added an extra 4-metric trust stats bar between the Hero section and Marketplace section during visual polish.
+- **Rule for Future:** When polishing UI aesthetics, refine existing cards, typography, and hover effects without adding unrequested new content blocks or marketing banners unless explicitly asked by the user.

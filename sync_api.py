@@ -169,6 +169,7 @@ for cat, items in parsed_by_cat.items():
             else: key = extracted_num
         denom_groups[key].append(item)
         
+    unique_items = []
     for key, group in denom_groups.items():
         # Prefer active product if available, else pick cheapest
         active_group = [x for x in group if x["status"] == "active"]
@@ -176,12 +177,49 @@ for cat, items in parsed_by_cat.items():
             cheapest = min(group, key=lambda x: x["original_price"])
         else:
             cheapest = min(active_group, key=lambda x: x["original_price"])
-            
+
         cheapest["product_name"] = clean_product_name(cheapest["product_name"], cat, categories_map[cat])
-        cheapest["id"] = product_id_counter
-        cheapest["cached_at"] = ""
+        unique_items.append(cheapest)
+
+    # Seleksi item untuk menghapus jumlah item yang hampir sama
+    special_items = []
+    numeric_items = []
+    for item in unique_items:
+        name_l = item["product_name"].lower()
+        if any(k in name_l for k in ["pass", "welkin", "starlight", "twilight", "card", "membership", "package", "pack", "supply", "level up"]):
+            special_items.append(item)
+        else:
+            num = extract_number(item["product_name"])
+            if num == 0:
+                special_items.append(item)
+            else:
+                numeric_items.append((num, item))
+
+    numeric_items.sort(key=lambda x: (x[0], x[1]["price"]))
+
+    filtered_numeric = []
+    prev_num = None
+    for num, item in numeric_items:
+        if prev_num is None:
+            filtered_numeric.append(item)
+            prev_num = num
+        else:
+            if num <= 50: min_diff, min_ratio = 5, 1.15
+            elif num <= 200: min_diff, min_ratio = 15, 1.15
+            elif num <= 1000: min_diff, min_ratio = 50, 1.12
+            else: min_diff, min_ratio = 200, 1.10
+
+            if (num - prev_num >= min_diff) and (num / prev_num >= min_ratio):
+                filtered_numeric.append(item)
+                prev_num = num
+
+    cat_final = special_items + filtered_numeric
+
+    for item in cat_final:
+        item["id"] = product_id_counter
+        item["cached_at"] = ""
         product_id_counter += 1
-        final_products.append(cheapest)
+        final_products.append(item)
 
 print(f"Total produk unik yang akan di-save: {len(final_products)} (Disaring {skipped_count} produk).")
 

@@ -28,8 +28,8 @@ var embedDB []byte
 
 
 func Setup() *fiber.App {
-	// Force Vercel Go compiler to rebuild and embed the updated orders.db
-	_ = "db_version_5"
+	// Force Vercel Go compiler to rebuild and embed the updated orders.db and favicons
+	_ = "db_version_11_cleanup_v1"
 	// Load environment variables dari .env
 	_ = godotenv.Load() // Ignore error on production/Vercel where .env file is missing
 
@@ -47,13 +47,13 @@ func Setup() *fiber.App {
 	// Detect if running on Vercel or AWS Lambda
 	dbPath := "./appsetup/orders.db"
 	if os.Getenv("VERCEL") != "" || os.Getenv("NOW_REGION") != "" || os.Getenv("LAMBDA_TASK_ROOT") != "" {
-		// Write the embedded DB to /tmp/orders_v3.db so it's writable
-		err := os.WriteFile("/tmp/orders_v3.db", embedDB, 0644)
+		// Write the embedded DB to /tmp/orders_v4_curated.db so it's writable
+		err := os.WriteFile("/tmp/orders_v4_curated.db", embedDB, 0644)
 		if err != nil {
-			log.Printf("[WARNING] Could not write to /tmp/orders_v3.db: %v", err)
+			log.Printf("[WARNING] Could not write to /tmp/orders_v4_curated.db: %v", err)
 		}
 		
-		dbPath = "/tmp/orders_v3.db"
+		dbPath = "/tmp/orders_v4_curated.db"
 		log.Println("[INFO] Serverless environment detected. Embedded DB written to: " + dbPath)
 	}
 
@@ -158,6 +158,10 @@ func Setup() *fiber.App {
 	api.Post("/order", middleware.RateLimit, handlers.CreateOrder)
 	api.Get("/order/:order_no", handlers.GetOrder) // Dukung GET /api/order/DMLxxx
 
+	// Midtrans Payment Gateway Endpoints
+	api.Post("/midtrans/callback", handlers.MidtransCallback)
+	api.Post("/midtrans/create-snap", handlers.CreateSnap)
+
 	// 2. Customer Member Endpoints (Auth & Profile)
 	api.Post("/member/register", handlers.MemberRegister)
 	api.Post("/member/login", handlers.MemberLogin)
@@ -191,6 +195,7 @@ func Setup() *fiber.App {
 		Root:   publicRoot,
 		Browse: false,
 		Index:  "index.html",
+		MaxAge: 86400, // 24 hours static asset caching for ultra-fast load
 	}))
 
 	return app

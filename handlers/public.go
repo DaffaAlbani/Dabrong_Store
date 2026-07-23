@@ -269,6 +269,17 @@ type OrderRequest struct {
 	PaymentMethod string      `json:"payment_method"`
 }
 
+func parseAmountFromText(text string) (int, error) {
+	re := regexp.MustCompile(`(?i)Rp\.?\s*([\d\.]+)`)
+	matches := re.FindStringSubmatch(text)
+	if len(matches) < 2 {
+		return 0, fmt.Errorf("no amount found")
+	}
+	raw := strings.ReplaceAll(matches[1], ".", "")
+	raw = strings.TrimSuffix(raw, ".")
+	return strconv.Atoi(raw)
+}
+
 func parseInterfaceToInt(val interface{}) (int, error) {
 	if val == nil {
 		return 0, nil

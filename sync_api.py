@@ -163,7 +163,10 @@ product_id_counter = 1
 for cat, items in parsed_by_cat.items():
     denom_groups = defaultdict(list)
     for item in items:
-        if is_subscription(item["product_name"]):
+        name_l = item["product_name"].lower()
+        if cat == "AGML" and "weekly" in name_l and ("card" in name_l or "pass" in name_l or "diamond" in name_l) and "elite" not in name_l:
+            key = "agml_weekly_diamond_pass"
+        elif is_subscription(item["product_name"]):
             key = "sub_" + item["product_name"].lower().strip()
         else:
             extracted_num = extract_number(item["product_name"])
@@ -182,16 +185,21 @@ for cat, items in parsed_by_cat.items():
         else:
             cheapest = min(active_group, key=lambda x: x["original_price"])
 
-        cheapest["product_name"] = clean_product_name(cheapest["product_name"], cat, categories_map[cat])
-
-        if is_subscription(cheapest["product_name"]):
+        if key == "agml_weekly_diamond_pass":
+            cheapest["product_name"] = "Weekly Diamond Pass"
+            cheapest["price"] = 28000
             special_items.append(cheapest)
         else:
-            num = extract_number(cheapest["product_name"])
-            if num == 0:
+            cheapest["product_name"] = clean_product_name(cheapest["product_name"], cat, categories_map[cat])
+
+            if is_subscription(cheapest["product_name"]):
                 special_items.append(cheapest)
             else:
-                numeric_items.append((num, cheapest))
+                num = extract_number(cheapest["product_name"])
+                if num == 0:
+                    special_items.append(cheapest)
+                else:
+                    numeric_items.append((num, cheapest))
 
     numeric_items.sort(key=lambda x: (x[0], x[1]["price"]))
 

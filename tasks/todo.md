@@ -1,8 +1,7 @@
-# TODO: Redesign Light Mode Header & Distinct "Masuk / Daftar" CTA Button
+# TODO: Remove White Navbar Container & Set Navbar Font to White
 
-- [ ] 1. Redesign Light Mode header (`.navbar` & `.navbar.scrolled`) to a sleek, crisp light glass design (`background: rgba(255, 255, 255, 0.95)` with clean border & shadow).
-- [ ] 2. Style "Masuk / Daftar" (`.nav-btn`) in Light Mode as a distinct, high-contrast dark charcoal pill button (`background: #0f172a !important; color: #ffffff !important`) with hover elevation so it never matches or blends into other elements.
-- [ ] 3. Refine navbar links (`.nav-a`), logo text, theme toggle button, and mobile menu overlay in Light Mode.
-- [ ] 4. Sync `appsetup/public/style.css` with `vercel_style.css`.
-- [ ] 5. Test frontend layout, commit to Git, and deploy to Vercel (`npx vercel --prod`).
-- [ ] 6. Document completion in `tasks/todo.md` and `walkthrough.md`.
+- [ ] 1. Remove white background box (`background: transparent !important`, `border: none !important`) from `.nav-links` across all themes and responsive breakpoints in `appsetup/public/style.css`.
+- [ ] 2. Set font color of all nav links (`.nav-a`), theme toggle icon, and "Masuk / Daftar" (`.nav-btn`) to crisp **WHITE** (`color: #ffffff !important`).
+- [ ] 3. Sync `appsetup/public/style.css` with `vercel_style.css`.
+- [ ] 4. Test frontend layout, commit to Git, and deploy to Vercel (`npx vercel --prod`).
+- [ ] 5. Document completion in `tasks/todo.md` and `walkthrough.md`.

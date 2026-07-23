@@ -154,14 +154,13 @@ func InitDB(dbPath string) error {
 	_, _ = DB.Exec("ALTER TABLE orders ADD COLUMN user_id INTEGER")
 	_, _ = DB.Exec("ALTER TABLE products_cache ADD COLUMN original_price INTEGER DEFAULT 0")
 
-	// Auto-seed products_cache dari embedded products.json jika kosong
-	var prodCount int
-	_ = DB.QueryRow("SELECT COUNT(*) FROM products_cache").Scan(&prodCount)
-	if prodCount == 0 && len(EmbeddedProducts) > 0 {
+	// Always sync products_cache from embedded products.json if available
+	if len(EmbeddedProducts) > 0 {
 		var embeddedList []Product
 		if err := json.Unmarshal(EmbeddedProducts, &embeddedList); err == nil && len(embeddedList) > 0 {
+			_, _ = DB.Exec("DELETE FROM products_cache")
 			_ = CacheProducts(embeddedList)
-			log.Printf("[DATABASE] Auto-seeded %d products from embedded products.json\n", len(embeddedList))
+			log.Printf("[DATABASE] Synced %d curated products from embedded products.json\n", len(embeddedList))
 		}
 	}
 

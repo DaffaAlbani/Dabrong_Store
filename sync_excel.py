@@ -227,13 +227,29 @@ for cat, items in parsed_by_cat.items():
         cheapest["product_name"] = clean_product_name(cheapest["product_name"], cat, categories_map[cat])
         unique_items.append(cheapest)
 
-    # Seleksi item untuk menghapus jumlah item yang hampir sama
+    # Seleksi item untuk menghapus jumlah item yang hampir sama (ultra-clean)
     special_items = []
     numeric_items = []
+    seen_special = set()
+
     for item in unique_items:
         name_l = item["product_name"].lower()
+
+        # Abai paket kelipatan kartu (misal 2x, 3x, 4x, 5x weekly card)
+        if re.search(r"\b[2-9]x\b", name_l):
+            continue
+
         if any(k in name_l for k in ["pass", "welkin", "starlight", "twilight", "card", "membership", "package", "pack", "supply", "level up"]):
-            special_items.append(item)
+            base_key = re.sub(r"\b(global|mobile legend|mobile legends|pack|package|1x)\b", "", name_l).strip()
+            if "weekly" in name_l: base_key = "weekly pass"
+            elif "twilight" in name_l: base_key = "twilight pass"
+            elif "starlight" in name_l: base_key = "starlight"
+            elif "welkin" in name_l: base_key = "welkin"
+            elif "express supply" in name_l: base_key = "express supply"
+
+            if base_key not in seen_special:
+                seen_special.add(base_key)
+                special_items.append(item)
         else:
             num = extract_number(item["product_name"])
             if num == 0:
@@ -250,17 +266,18 @@ for cat, items in parsed_by_cat.items():
             filtered_numeric.append(item)
             prev_num = num
         else:
-            if num <= 50: min_diff, min_ratio = 5, 1.15
-            elif num <= 200: min_diff, min_ratio = 15, 1.15
-            elif num <= 1000: min_diff, min_ratio = 50, 1.12
-            else: min_diff, min_ratio = 200, 1.10
+            if num <= 50: min_diff, min_ratio = 10, 1.30
+            elif num <= 200: min_diff, min_ratio = 35, 1.30
+            elif num <= 1000: min_diff, min_ratio = 180, 1.30
+            elif num <= 5000: min_diff, min_ratio = 700, 1.30
+            else: min_diff, min_ratio = 1800, 1.25
 
             if (num - prev_num >= min_diff) and (num / prev_num >= min_ratio):
                 filtered_numeric.append(item)
                 prev_num = num
 
     cat_final = special_items + filtered_numeric
-    print(f"   -> Setelah seleksi denominasi mirip: {len(cat_final)} produk disimpan.")
+    print(f"   -> Setelah seleksi ultra-clean: {len(cat_final)} produk disimpan.")
 
     for item in cat_final:
         item["id"] = product_id_counter

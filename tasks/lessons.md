@@ -27,4 +27,8 @@
 ## 6. Avoid Adding Unrequested Content Bars or Extra Sections
 - **Correction:** The user requested "Menampilkan 4 indikator kepercayaaan utama di bawah Hero Section... gaperlu ini".
 - **Pattern:** Added an extra 4-metric trust stats bar between the Hero section and Marketplace section during visual polish.
-- **Rule for Future:** When polishing UI aesthetics, refine existing cards, typography, and hover effects without adding unrequested new content blocks or marketing banners unless explicitly asked by the user.
+## 7. Serverless SQLite Cache Persistence Across Warm Lambdas
+- **Correction:** User reported "ga brubahh" after redeploying updated product catalog.
+- **Pattern:** In Vercel serverless environment, files written to `/tmp` (like `/tmp/orders.db`) persist across warm Lambda invocations. When database auto-seeding checked `COUNT(*) FROM products_cache == 0`, it skipped updating SQLite because old cache data still existed in `/tmp`.
+- **Rule for Future:** Always force-sync or clear embedded cache tables (`DELETE FROM products_cache`) on database initialization when embedded data (`products.json`) is updated, and update the `/tmp` database path name to ensure fresh deployment state.
+

@@ -1,7 +1,8 @@
-# TODO: Streamline Diamond Variants to Popular Tiers
+# TODO: Refine Light Mode Aesthetics & Header Design
 
-- [ ] 1. Update `sync_excel.py` and `sync_api.py` with streamlined numeric spacing thresholds (~6-10 clean, popular diamond/coin tiers per game).
-- [ ] 2. Run `python3 sync_api.py` and `python3 sync_excel.py` to regenerate `database/products.json` and SQLite `products_cache`.
-- [ ] 3. Run `go test ./...` and `go build` to verify backend integrity.
-- [ ] 4. Commit changes to Git, push to GitHub, and re-deploy to Vercel (`npx vercel --prod`).
-- [ ] 5. Document review & final item counts in `tasks/todo.md` and `walkthrough.md`.
+- [ ] 1. Remove harsh white box background from desktop `.nav-links` in `appsetup/public/style.css`.
+- [ ] 2. Update `.nav-btn` ("Masuk / Daftar") button to use premium gradient with crisp white text for high contrast in both themes.
+- [ ] 3. Refine `body.light-mode` header, cards, modals, form inputs, badges, and text contrasts for a sleek, modern UI.
+- [ ] 4. Sync `appsetup/public/style.css` with `vercel_style.css`.
+- [ ] 5. Test frontend layout, commit to Git, and deploy to Vercel (`npx vercel --prod`).
+- [ ] 6. Document completion in `tasks/todo.md` and `walkthrough.md`.
